@@ -87,13 +87,21 @@ public class OrderListDataManager {
         numberOfOrdersCreation(form.getDays(), orderDataManager.data);
     }
 
+
+    //when You travel everyday you must set arrived and travel off date and end city destination for each day
+    //the problem is that order list has limited slots for dates so this method creates number of orders and set their data + data for
+    //every travel day and destination
     private void numberOfOrdersCreation(List<Integer> days, List<ImgData> data) {
         int daysInOrder = Config.NUMBER_OF_DAYS_IN_ONE_ORDER;
-        int ordersNeeded = 31 / daysInOrder + 1;
+        int ordersNeeded = days.size() / daysInOrder;
+        if (days.size() % daysInOrder != 0) ordersNeeded++;
 
         for (int i = 0; i < ordersNeeded; i++) {
-            DataManager currentManager = new DataManager(form, data);
-            List<Integer> currentCays = days.subList(i*daysInOrder, (i + 1) * daysInOrder);
+
+            List<ImgData> newData = new ArrayList<>(data);
+            DataManager currentManager = new DataManager(form, newData);
+            int max = (i + 1) * daysInOrder;
+            List<Integer> currentCays = days.subList(i*daysInOrder, Math.min(max, days.size()));
             addDaysAndDestination(currentCays, currentManager);
             BufferedImage currentImage = ImageDrawer.drawDataOnBackgroundImg(currentManager.data, blankImage);
             sheetStorage.add(currentImage);
