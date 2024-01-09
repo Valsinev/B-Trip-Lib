@@ -9,4 +9,5 @@ public class Config {
     public static final String SHRIFT_TYPE = "Arial";
     public static final int FONT_STYLE = Font.ITALIC;
     public static final Color FONT_COLOR = Color.BLACK;
+    public static final int NUMBER_OF_DAYS_IN_ONE_ORDER = 8;
 }

@@ -87,6 +87,19 @@ public class OrderListDataManager {
         numberOfOrdersCreation(form.getDays(), orderDataManager.data);
     }
 
+    private void numberOfOrdersCreation(List<Integer> days, List<ImgData> data) {
+        int daysInOrder = Config.NUMBER_OF_DAYS_IN_ONE_ORDER;
+        int ordersNeeded = 31 / daysInOrder + 1;
+
+        for (int i = 0; i < ordersNeeded; i++) {
+            DataManager currentManager = new DataManager(form, data);
+            List<Integer> currentCays = days.subList(i*daysInOrder, (i + 1) * daysInOrder);
+            addDaysAndDestination(currentCays, currentManager);
+            BufferedImage currentImage = ImageDrawer.drawDataOnBackgroundImg(currentManager.data, blankImage);
+            sheetStorage.add(currentImage);
+        }
+    }
+
     public void getTripWithVehicleWithHotel() {
 
         DataManager dataManager = new DataManager(form, commonOrderDataWithVehicle());
@@ -149,75 +162,6 @@ public class OrderListDataManager {
         dataManager.dataAdder(OrderTextCoordinates.dailyMoneyTotalSumCoordinates, ExpenseCalculator.calcDailyMoney(form.getNuberOfDays(), form.getNumberOfNightsStayed()));
 
         return dataManager.data;
-    }
-
-
-    //when You travel everyday you must set arrived and travel off date and end city destination for each day
-    //the problem is that order list has only 8 slots for dates so this method creates order lists id days travel exceeds 8, 16, 24...
-    private void numberOfOrdersCreation(List<Integer> days, List<ImgData> data) {
-
-        if (days.size() < 9) {
-            DataManager order1Data = new DataManager(form, data);
-            addDaysAndDestination(days, order1Data);
-
-            BufferedImage order = ImageDrawer.drawDataOnBackgroundImg(order1Data.data, blankImage);
-            sheetStorage.add(order);
-        } else if (days.size() > 8 && days.size() < 17) {
-            DataManager order1Data = new DataManager(form, new ArrayList<>(data));
-            DataManager order2Data = new DataManager(form, new ArrayList<>(data));
-            //split days by 8 because there is 8 slots in 1 order list
-            List<Integer> order1Days = days.subList(0, 8);
-            List<Integer> order2Days = days.subList(8, days.size());
-            addDaysAndDestination(order1Days, order1Data);
-            addDaysAndDestination(order2Days, order2Data);
-
-            BufferedImage order1 = ImageDrawer.drawDataOnBackgroundImg(order1Data.data, blankImage);
-            BufferedImage order2 = ImageDrawer.drawDataOnBackgroundImg(order2Data.data, blankImage);
-            sheetStorage.add(order1);
-            sheetStorage.add(order2);
-
-        } else if (days.size() > 16 && days.size() < 25) {
-            DataManager order1Data = new DataManager(form, new ArrayList<>(data));
-            DataManager order2Data = new DataManager(form, new ArrayList<>(data));
-            DataManager order3Data = new DataManager(form, new ArrayList<>(data));
-            //split days by 8 because there is 8 slots in 1 order list
-            List<Integer> order1Days = days.subList(0, 8);
-            List<Integer> order2Days = days.subList(8, 16);
-            List<Integer> order3Days = days.subList(16, days.size());
-
-            addDaysAndDestination(order1Days, order1Data);
-            BufferedImage order1 = ImageDrawer.drawDataOnBackgroundImg(order1Data.data, blankImage);
-            sheetStorage.add(order1);
-            addDaysAndDestination(order2Days, order2Data);
-            BufferedImage order2 = ImageDrawer.drawDataOnBackgroundImg(order2Data.data, blankImage);
-            sheetStorage.add(order2);
-            addDaysAndDestination(order3Days, order3Data);
-            BufferedImage order3 = ImageDrawer.drawDataOnBackgroundImg(order3Data.data, blankImage);
-            sheetStorage.add(order3);
-
-        } else if (days.size() > 24) {
-            DataManager order1Data = new DataManager(form, new ArrayList<>(data));
-            DataManager order2Data = new DataManager(form, new ArrayList<>(data));
-            DataManager order3Data = new DataManager(form, new ArrayList<>(data));
-            DataManager order4Data = new DataManager(form, new ArrayList<>(data));
-            //split days by 8 because there is 8 slots in 1 order list
-            List<Integer> order1Days = days.subList(0, 8);
-            List<Integer> order2Days = days.subList(8, 16);
-            List<Integer> order3Days = days.subList(16, 24);
-            List<Integer> order4Days = days.subList(24, days.size());
-            addDaysAndDestination(order1Days, order1Data);
-            addDaysAndDestination(order2Days, order2Data);
-            addDaysAndDestination(order3Days, order3Data);
-            addDaysAndDestination(order4Days, order4Data);
-            BufferedImage order1 = ImageDrawer.drawDataOnBackgroundImg(order1Data.data, blankImage);
-            BufferedImage order2 = ImageDrawer.drawDataOnBackgroundImg(order2Data.data, blankImage);
-            BufferedImage order3 = ImageDrawer.drawDataOnBackgroundImg(order3Data.data, blankImage);
-            BufferedImage order4 = ImageDrawer.drawDataOnBackgroundImg(order4Data.data, blankImage);
-            sheetStorage.add(order1);
-            sheetStorage.add(order2);
-            sheetStorage.add(order3);
-            sheetStorage.add(order4);
-        } else throw new ArrayIndexOutOfBoundsException();
     }
 
     private void addDaysAndDestination(List<Integer> days, DataManager data) {

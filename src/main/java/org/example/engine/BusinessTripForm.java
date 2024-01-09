@@ -36,8 +36,6 @@ public interface BusinessTripForm {
 
     String getToWhichDayField();
 
-    String getAddExpensesField();
-
     List<Integer> getDays();
 
     boolean getDay1();
