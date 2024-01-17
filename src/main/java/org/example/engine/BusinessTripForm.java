@@ -7,11 +7,11 @@ public interface BusinessTripForm {
     String getFullName();
     String getPersonalNumber();
     String getPosition();
-    String getNumberDocuments();
+    int getNumberDocuments();
     String getBranchIn();
     String getEndDestination();
     String getStartDestination();
-    String getNuberOfDays();
+    int getNumberOfDays();
     String getMonthNumber();
     String getWhatYear();
     String getReason();
@@ -32,9 +32,9 @@ public interface BusinessTripForm {
     String getFuelPrice();
     String getKilometers();
 
-    String getFromWhichDayField();
+    int getFromWhichDayField();
 
-    String getToWhichDayField();
+    int getToWhichDayField();
 
     List<Integer> getDays();
 

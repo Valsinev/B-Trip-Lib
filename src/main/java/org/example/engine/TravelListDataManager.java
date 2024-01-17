@@ -64,7 +64,7 @@ public class TravelListDataManager {
 
     //loops each day add dates, reason in startCity-endCity-startCity/reason/ format and kilometers on correct coordinates
     private void dateReasonKilometersAdderWithoutNightStay(DataManager dataManager) {
-        int kilometers = Integer.parseInt(form.getKilometers()) / Integer.parseInt(form.getNuberOfDays());
+        int kilometers = Integer.parseInt(form.getKilometers()) / form.getNumberOfDays();
         for (int day = 0; day < form.getDays().size(); day++) {
             //start city-end city-start city/reason/
             dataManager.dataAdder(TravelListTextCoordinates.destinationAndReasonCoordinates.get(day), String.format("%s-%s-%s/%s/", form.getStartDestination(), form.getEndDestination(), form.getStartDestination(), form.getReason()));

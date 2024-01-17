@@ -44,7 +44,7 @@ public class OrderListDataManager {
     public void getTripWithoutVehicleWithoutHotel() {
         DataManager dataManager = new DataManager(form, commonOrderData());
         dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(Config.DAILY_WITHOUT_NIGHT_STAY));
-        String dailyExpenses = ExpenseCalculator.calcDailyMoney(form.getNuberOfDays(), form.getNumberOfNightsStayed());
+        String dailyExpenses = ExpenseCalculator.calcDailyMoney(String.valueOf(form.getNumberOfDays()), form.getNumberOfNightsStayed());
         String hotelExpenses = "0";
         String fuelExpenses = "0";
         String total = ExpenseCalculator.calculateTotalExpenses(hotelExpenses, dailyExpenses, fuelExpenses, form.getAdditionalExpenses());
@@ -61,7 +61,7 @@ public class OrderListDataManager {
         }
 
         dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(Config.DAILY_WITH_NIGHT_STAY));
-        String dailyExpenses = ExpenseCalculator.calcDailyMoney(form.getNuberOfDays(), form.getNumberOfNightsStayed());
+        String dailyExpenses = ExpenseCalculator.calcDailyMoney(String.valueOf(form.getNumberOfDays()), form.getNumberOfNightsStayed());
         String hotelExpenses = ExpenseCalculator.calculateTotalNightStayExpense(form.getNumberOfNightsStayed(), form.getNightStayPrice());
         String fuelExpenses = "0";
         String total = ExpenseCalculator.calculateTotalExpenses(hotelExpenses, dailyExpenses, fuelExpenses, form.getAdditionalExpenses());
@@ -79,7 +79,7 @@ public class OrderListDataManager {
 
         orderDataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(Config.DAILY_WITHOUT_NIGHT_STAY));
         String daysInHotel = "0";
-        String dailyTotal = ExpenseCalculator.calcDailyMoney(form.getNuberOfDays(), daysInHotel);
+        String dailyTotal = ExpenseCalculator.calcDailyMoney(String.valueOf(form.getNumberOfDays()), daysInHotel);
         String fuelTotal = ExpenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice());
         String hotelExpenses = "0";
         orderDataManager.dataAdder(OrderTextCoordinates.totalSumCoordinates, ExpenseCalculator.calculateTotalExpenses(hotelExpenses, dailyTotal, fuelTotal, form.getAdditionalExpenses()));
@@ -112,7 +112,7 @@ public class OrderListDataManager {
 
         DataManager dataManager = new DataManager(form, commonOrderDataWithVehicle());
 
-        String dailyTotal = ExpenseCalculator.calcDailyMoney(form.getNuberOfDays(), form.getNumberOfNightsStayed());
+        String dailyTotal = ExpenseCalculator.calcDailyMoney(String.valueOf(form.getNumberOfDays()), form.getNumberOfNightsStayed());
         String fuelTotal = ExpenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice());
         String nightStayTotal = ExpenseCalculator.calculateTotalNightStayExpense(form.getNumberOfNightsStayed(), form.getNightStayPrice());
 
@@ -156,10 +156,10 @@ public class OrderListDataManager {
 
         dataManager.dataAdder(OrderTextCoordinates.fullNameCoordinates, form.getFullName());
         dataManager.dataAdder(OrderTextCoordinates.fullNameAndEmployeePositionCoordinates, String.format("%s, %s", form.getFullName(), form.getPosition()));
-        dataManager.dataAdder(OrderTextCoordinates.numberDocumentsCoordinates, form.getNumberDocuments());
+        dataManager.dataAdder(OrderTextCoordinates.numberDocumentsCoordinates, String.valueOf(form.getNumberDocuments()));
         dataManager.dataAdder(OrderTextCoordinates.startCityCoordinates, form.getStartDestination());
         dataManager.dataAdder(OrderTextCoordinates.endCityCoordinates, form.getEndDestination());
-        dataManager.dataAdder(OrderTextCoordinates.numberOfDaysCoordinates, String.valueOf(form.getNuberOfDays()));
+        dataManager.dataAdder(OrderTextCoordinates.numberOfDaysCoordinates, String.valueOf(form.getNumberOfDays()));
         dataManager.dataAdder(OrderTextCoordinates.startDateCoordinates, String.format("%02d.%02d.%d", form.getDays().get(0), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
         dataManager.dataAdder(OrderTextCoordinates.endDateCoordinates, String.format("%02d.%02d.%d", form.getDays().get(form.getDays().size() - 1), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
         dataManager.dataAdder(OrderTextCoordinates.reasonCoordinates, form.getReason());
@@ -167,7 +167,7 @@ public class OrderListDataManager {
         dataManager.dataAdder(OrderTextCoordinates.orderNumberCoordinates, String.format("%s-%02d-%02d", form.getPersonalNumber(), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getTripNumberThisMonth())));
         dataManager.dataAdder(OrderTextCoordinates.businessTripFNumberCoordinates, form.getBranchIn());
         dataManager.dataAdder(OrderTextCoordinates.difficultiesCoordinates, TextConstants.DOESNT_ENCOUNTER);
-        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyTotalSumCoordinates, ExpenseCalculator.calcDailyMoney(form.getNuberOfDays(), form.getNumberOfNightsStayed()));
+        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyTotalSumCoordinates, ExpenseCalculator.calcDailyMoney(String.valueOf(form.getNumberOfDays()), form.getNumberOfNightsStayed()));
 
         return dataManager.data;
     }

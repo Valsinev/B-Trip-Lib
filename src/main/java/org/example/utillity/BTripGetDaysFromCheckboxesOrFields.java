@@ -20,7 +20,7 @@ public class BTripGetDaysFromCheckboxesOrFields {
             daysAdder(daysCheckBox, days);
         }
         if (bTrip.getIsNightStayedInHotel()) {
-            for (int i = Integer.parseInt(bTrip.getFromWhichDayField()); i <= Integer.parseInt(bTrip.getToWhichDayField()); i++) {
+            for (int i = bTrip.getFromWhichDayField(); i <= bTrip.getToWhichDayField(); i++) {
                 days.add(i);
             }
         }
