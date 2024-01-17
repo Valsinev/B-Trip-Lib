@@ -10,7 +10,7 @@ public class FieldValidator {
     public static boolean validateDigitField(String field) {
         String matchingDigits = "[+]?([0-9]*[.])?[0-9]+";
         boolean isValid = true;
-        if (!field.matches(matchingDigits)) {
+        if (field == null || !field.matches(matchingDigits)) {
             isValid = false;
         }
         return isValid;
@@ -18,7 +18,7 @@ public class FieldValidator {
     public static boolean validateMonthField(String field) {
         String monthRegex = "^(1[0-2]|[1-9])$";
         boolean isValid = true;
-        if (!field.matches(monthRegex)) {
+        if (field == null || !field.matches(monthRegex)) {
             isValid = false;
         }
         return isValid;
@@ -26,7 +26,7 @@ public class FieldValidator {
     public static boolean validateDayField(String field) {
         String dayRegex = "^(0?[1-9]|[1-2][0-9]|3[0-1])$";
         boolean isValid = true;
-        if (!field.matches(dayRegex)) {
+        if (field == null || !field.matches(dayRegex)) {
             isValid = false;
         }
         return isValid;
