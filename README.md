@@ -1,4 +1,5 @@
 # B-Trip-Lib
+This library is made to draw on a blank image document with user data passed to a Form class
 
 How to use it:
 
