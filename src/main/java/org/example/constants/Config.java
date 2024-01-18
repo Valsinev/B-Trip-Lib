@@ -10,4 +10,5 @@ public class Config {
     public static final int FONT_STYLE = Font.ITALIC;
     public static final Color FONT_COLOR = Color.BLACK;
     public static final int NUMBER_OF_DAYS_IN_ONE_ORDER = 8;
+    public static final Font FONT = new Font(SHRIFT_TYPE, FONT_STYLE, SHRIFT_SIZE);
 }

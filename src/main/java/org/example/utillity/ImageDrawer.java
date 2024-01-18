@@ -9,27 +9,30 @@ import java.util.List;
 
 public class ImageDrawer {
 
-    public static BufferedImage drawDataOnBackgroundImg(List<ImgData> imgData, BufferedImage backgroundImage) {
+    public static BufferedImage drawDataOnBackgroundImg(List<ImgData> imgData, BufferedImage backgroundImage, Font font, Color fontColor) {
         // Create a new BufferedImage with the same dimensions as the blankImage
         BufferedImage resultImage = new BufferedImage(
                 backgroundImage.getWidth(),
                 backgroundImage.getHeight(),
                 backgroundImage.getType());
 
-        Graphics g = resultImage.getGraphics();
+        Graphics2D g = resultImage.createGraphics();
 
-        // Copy the content of the blankImage to the new image
-        g.drawImage(backgroundImage, 0, 0, null);
+        try {
+            // Copy the content of the blankImage to the new image
+            g.drawImage(backgroundImage, 0, 0, null);
 
-        // Your drawing logic here
-        g.setFont(new Font(Config.SHRIFT_TYPE, Config.FONT_STYLE, Config.SHRIFT_SIZE));
-        g.setColor(Config.FONT_COLOR);
+            // Your drawing logic here
+            g.setFont(font);
+            g.setColor(fontColor);
 
-        for (ImgData data : imgData) {
-            g.drawString(data.data(), data.xCord(), data.yCord());
+            for (ImgData data : imgData) {
+                g.drawString(data.data(), data.xCord(), data.yCord());
+            }
+        } finally {
+            // Dispose of the Graphics2D object
+            g.dispose();
         }
-
-        g.dispose();
 
         return resultImage;
     }

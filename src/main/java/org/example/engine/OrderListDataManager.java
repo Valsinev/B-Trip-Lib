@@ -50,7 +50,7 @@ public class OrderListDataManager {
         String total = ExpenseCalculator.calculateTotalExpenses(hotelExpenses, dailyExpenses, fuelExpenses, form.getAdditionalExpenses());
         dataManager.dataAdder(OrderTextCoordinates.totalSumCoordinates, total);
 
-        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage));
+        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
     }
 
     public void getTripWithoutVehicleWithHotel() {
@@ -69,7 +69,7 @@ public class OrderListDataManager {
         dataManager.dataAdder(OrderTextCoordinates.totalNightStayMoneyCoordinates, hotelExpenses);
         dataManager.dataAdder(OrderTextCoordinates.nightStayMoneyCoordinates, form.getNightStayPrice());
 
-        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage));
+        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
     }
 
 
@@ -103,7 +103,7 @@ public class OrderListDataManager {
             int max = (i + 1) * daysInOrder;
             List<Integer> currentCays = days.subList(i*daysInOrder, Math.min(max, days.size()));
             addDaysAndDestination(currentCays, currentManager);
-            BufferedImage currentImage = ImageDrawer.drawDataOnBackgroundImg(currentManager.data, blankImage);
+            BufferedImage currentImage = ImageDrawer.drawDataOnBackgroundImg(currentManager.data, blankImage, Config.FONT, Config.FONT_COLOR);
             sheetStorage.add(currentImage);
         }
     }
@@ -131,7 +131,7 @@ public class OrderListDataManager {
         if (form.getIsTravelOnFirstDay()) {
             dataManager.dataAdder(OrderTextCoordinates.days2.get(0), String.format("%02d.%02d.%d", form.getDays().get(form.getDays().size() - 1), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
         }
-        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage));
+        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
     }
 
     //add all shared vehicle data in order list

@@ -1,5 +1,6 @@
 package org.example.engine;
 
+import org.example.constants.Config;
 import org.example.constants.TravelListTextCoordinates;
 import org.example.utillity.ImageDrawer;
 
@@ -35,14 +36,14 @@ public class TravelListDataManager {
         DataManager dataManager = new DataManager(form, commonTravelData());
         dateReasonKilometersAdderWithoutNightStay(dataManager);
 
-        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage));
+        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
     }
 
     public void getTravelWithHotel() {
         DataManager dataManager = new DataManager(form, commonTravelData());
         dateReasonKilometersAdderWithNightStay(dataManager);
 
-        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage));
+        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
     }
 
     private List<ImgData> commonTravelData() {
