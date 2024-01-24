@@ -1,6 +1,5 @@
 package org.example.utillity;
 
-import org.example.constants.Config;
 import org.example.engine.ImgData;
 
 import java.awt.*;

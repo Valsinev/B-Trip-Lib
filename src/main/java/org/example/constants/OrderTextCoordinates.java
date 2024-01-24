@@ -37,8 +37,8 @@ public class OrderTextCoordinates {
             new TextCords(1660, 246)
     );
     public static final List<TextCords> fullNameAndEmployeePositionCoordinates  = List.of(
-            new TextCords(1670, 373),
-            new TextCords(1670, 1600)
+            new TextCords(1670, 416),
+            new TextCords(1670, 1678)
     );
     public static final List<TextCords> startCityCoordinates  = List.of(
             new TextCords(1470, 511)

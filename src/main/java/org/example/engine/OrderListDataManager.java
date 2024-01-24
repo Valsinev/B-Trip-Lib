@@ -20,22 +20,27 @@ public class OrderListDataManager {
     private final BusinessTripForm form;
     private final List<BufferedImage> sheetStorage;
 
-    InputStream inputStream;
     BufferedImage blankImage;
 
 
     public OrderListDataManager(BusinessTripForm form, List<BufferedImage> sheetStorage) {
 
+
         this.form = form;
         this.sheetStorage = sheetStorage;
 
-        inputStream = getClass().getClassLoader().getResourceAsStream("img/order.png");
-
-        try {
-            assert inputStream != null;
-            blankImage = ImageIO.read(inputStream);
+        // Using try-with-resources to automatically close the input stream
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("img/order.png")) {
+            if (inputStream != null) {
+                blankImage = ImageIO.read(inputStream);
+            } else {
+                // Handle the case where the resource is not found
+                throw new RuntimeException("Image resource not found");
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace(); // Log the exception or handle it appropriately
+            // Optionally, you may choose to rethrow the exception or return a default image.
+            // throw new RuntimeException("Failed to read image", e);
         }
 
     }
@@ -155,7 +160,8 @@ public class OrderListDataManager {
         DataManager dataManager = new DataManager(form, new ArrayList<>());
 
         dataManager.dataAdder(OrderTextCoordinates.fullNameCoordinates, form.getFullName());
-        dataManager.dataAdder(OrderTextCoordinates.fullNameAndEmployeePositionCoordinates, String.format("%s, %s", form.getFullName(), form.getPosition()));
+        String ifEmptyNames = form.getPersonalNumber().trim().isEmpty() || form.getFullName() == null ? "                                             " : form.getFullName();
+        dataManager.dataAdder(OrderTextCoordinates.fullNameAndEmployeePositionCoordinates, String.format("%s, %s", ifEmptyNames, form.getPosition()));
         dataManager.dataAdder(OrderTextCoordinates.numberDocumentsCoordinates, String.valueOf(form.getNumberDocuments()));
         dataManager.dataAdder(OrderTextCoordinates.startCityCoordinates, form.getStartDestination());
         dataManager.dataAdder(OrderTextCoordinates.endCityCoordinates, form.getEndDestination());
@@ -164,7 +170,8 @@ public class OrderListDataManager {
         dataManager.dataAdder(OrderTextCoordinates.endDateCoordinates, String.format("%02d.%02d.%d", form.getDays().get(form.getDays().size() - 1), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
         dataManager.dataAdder(OrderTextCoordinates.reasonCoordinates, form.getReason());
         dataManager.dataAdder(OrderTextCoordinates.employerNameCoordinates, form.getHeadEmployeeName());
-        dataManager.dataAdder(OrderTextCoordinates.orderNumberCoordinates, String.format("%s-%02d-%02d", form.getPersonalNumber(), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getTripNumberThisMonth())));
+        String ifEmptyPersonalNumber = form.getPersonalNumber().trim().isEmpty() || form.getPersonalNumber() == null ? "              " : form.getPersonalNumber();
+        dataManager.dataAdder(OrderTextCoordinates.orderNumberCoordinates, String.format("%s-%02d-%02d", ifEmptyPersonalNumber, Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getTripNumberThisMonth())));
         dataManager.dataAdder(OrderTextCoordinates.businessTripFNumberCoordinates, form.getBranchIn());
         dataManager.dataAdder(OrderTextCoordinates.difficultiesCoordinates, TextConstants.DOESNT_ENCOUNTER);
         dataManager.dataAdder(OrderTextCoordinates.dailyMoneyTotalSumCoordinates, ExpenseCalculator.calcDailyMoney(String.valueOf(form.getNumberOfDays()), form.getNumberOfNightsStayed()));
