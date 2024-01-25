@@ -144,7 +144,7 @@ public class OrderListDataManager {
         dataManager.dataAdder(OrderTextCoordinates.fuelConsumptionFor100Coordinates, String.valueOf(form.getCostBy100()));
         dataManager.dataAdder(OrderTextCoordinates.fuelTypeCoordinates, form.getFuelType());
         dataManager.dataAdder(OrderTextCoordinates.fuelPriceCoordinates, String.format("%.2f", form.getFuelPrice()));
-        dataManager.dataAdder(OrderTextCoordinates.kilometersCoordinates, String.format("%.2f", form.getKilometers()));
+        dataManager.dataAdder(OrderTextCoordinates.kilometersCoordinates, form.getKilometers().toString());
         dataManager.dataAdder(OrderTextCoordinates.kilometersDividedBy100Coordinates,  String.format("%.2f", form.getKilometers().divide(BigDecimal.valueOf(100.0), 2, RoundingMode.FLOOR)));
         dataManager.dataAdder(OrderTextCoordinates.typeMPSCoordinates, form.getCategory());
         dataManager.dataAdder(OrderTextCoordinates.totalSumForTransportCoordinates, String.format("%.2f", ExpenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice())));
