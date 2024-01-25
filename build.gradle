@@ -1,18 +1,19 @@
 
 plugins {
     id 'java'
-    id 'maven-publish'
 }
 
 group = 'org.example'
 version = '1'
 
 java {
-    sourceCompatibility = '16' // or '15', '16', '17', etc.
-    targetCompatibility = '16' // Should match or be lower than sourceCompatibility
+    sourceCompatibility = '17' // or '15', '16', '17', etc.
+    targetCompatibility = '17' // Should match or be lower than sourceCompatibility
 }
 
-
+repositories {
+    mavenCentral()
+}
 
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
