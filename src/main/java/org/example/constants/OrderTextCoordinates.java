@@ -54,7 +54,7 @@ public class OrderTextCoordinates {
     public static final List<TextCords> typeMPSCoordinates  = List.of(
             new TextCords(1460, 927)
     );
-    public static final List<TextCords> vehicleMakeAndModelCoordinates  = List.of(
+    public static final List<TextCords> vehicleMakeCoordinates  = List.of(
             new TextCords(1700, 927)
     );
     public static final List<TextCords> vehicleRegNumberCoordinates  = List.of(

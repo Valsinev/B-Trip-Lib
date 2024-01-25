@@ -1,5 +1,6 @@
 package org.example.engine;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface BusinessTripForm {
@@ -11,26 +12,27 @@ public interface BusinessTripForm {
     String getBranchIn();
     String getEndDestination();
     String getStartDestination();
-    int getNumberOfDays();
+    BigDecimal getNumberOfDays();
     String getMonthNumber();
     String getWhatYear();
     String getReason();
     String getHeadEmployeeName();
     String getTripNumberThisMonth();
-    String getAdditionalExpenses();
+    BigDecimal getAdditionalExpenses();
     boolean getIsNightStayedInHotel();
-    String getNightStayPrice();
-    String getNumberOfNightsStayed();
+    BigDecimal getNightStayPrice();
+    BigDecimal getNumberOfNightsStayed();
     boolean getIsTravelOnFirstDay();
     boolean getIsTravelOnLastDay();
     boolean getIsTravelWithYourVehicle();
-    String getMakeAndModel();
+    String getModel();
+    String getMake();
     String getCategory();
     String getRegistrationNumber();
-    String getCostBy100();
+    BigDecimal getCostBy100();
     String getFuelType();
-    String getFuelPrice();
-    String getKilometers();
+    BigDecimal getFuelPrice();
+    BigDecimal getKilometers();
 
     int getFromWhichDayField();
 
