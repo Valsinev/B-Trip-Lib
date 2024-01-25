@@ -7,9 +7,10 @@ group = 'org.example'
 version = '1'
 
 java {
-    sourceCompatibility = '16'
-    targetCompatibility = '16'
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
 }
+
 
 repositories {
     mavenCentral()
