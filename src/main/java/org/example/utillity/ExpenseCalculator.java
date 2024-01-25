@@ -3,57 +3,70 @@ package org.example.utillity;
 import org.example.constants.Config;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
 
 public class ExpenseCalculator {
-    public static String calculateTotalFuelPrice(String kilometers, String costBy100, String fuelPrice) {
-        if (!FieldValidator.validateDigitField(kilometers) || !FieldValidator.validateDigitField(costBy100) || !FieldValidator.validateDigitField(fuelPrice)) {
-            return "0.0";
-        }
-        return String.format("%.2f", new BigDecimal(calculateFuelConsumed(kilometers, costBy100)).multiply(new BigDecimal(fuelPrice)));
+
+    public static BigDecimal calculateTotalFuelPrice(BigDecimal kilometers, BigDecimal costBy100, BigDecimal fuelPrice) {
+        BigDecimal distance = Objects.requireNonNullElse(kilometers, BigDecimal.ZERO);
+        distance = BigDecValidator.asignZeroIfLessThanOne(distance);
+        BigDecimal costFor100 = Objects.requireNonNullElse(costBy100, BigDecimal.ZERO);
+        costFor100 = BigDecValidator.asignZeroIfLessThanOne(costFor100);
+        BigDecimal fuelCost = Objects.requireNonNullElse(fuelPrice, BigDecimal.ZERO);
+        fuelCost = BigDecValidator.asignZeroIfLessThanOne(fuelCost);
+        return calculateFuelConsumed(distance, costFor100).multiply(fuelCost);
     }
 
-    public static String calculateFuelConsumed(String kilometers, String costBy100) {
-        if (!FieldValidator.validateDigitField(kilometers) || !FieldValidator.validateDigitField(costBy100)) {
-            return "0.0";
-        }
-        return new BigDecimal(kilometers).divide(BigDecimal.valueOf(100.0)).multiply(new BigDecimal(costBy100)).toString();
+    public static BigDecimal calculateFuelConsumed(BigDecimal kilometers, BigDecimal costBy100) {
+        BigDecimal distance = Objects.requireNonNullElse(kilometers, BigDecimal.ZERO);
+        distance = BigDecValidator.asignZeroIfLessThanOne(distance);
+        BigDecimal costFor100 = Objects.requireNonNullElse(costBy100, BigDecimal.ZERO);
+        costFor100 = BigDecValidator.asignZeroIfLessThanOne(costFor100);
+        return distance.divide(BigDecimal.valueOf(100.0), 2, RoundingMode.FLOOR).multiply(costFor100);
     }
 
-    public static String calculateTotalExpenses(String hotelExpenses, String dailyExpenses, String totalFuelExpenses, String addExpenses) {
+    public static BigDecimal calculateTotalExpenses(BigDecimal hotelExpenses, BigDecimal dailyExpenses, BigDecimal totalFuelExpenses, BigDecimal addExpenses) {
 
-        BigDecimal hotel = FieldValidator.validateDigitField(hotelExpenses) ? new BigDecimal(hotelExpenses) : BigDecimal.ZERO;
-        BigDecimal daily = FieldValidator.validateDigitField(dailyExpenses) ? new BigDecimal(dailyExpenses) : BigDecimal.ZERO;
-        BigDecimal fuel = FieldValidator.validateDigitField(totalFuelExpenses) ? new BigDecimal(totalFuelExpenses) : BigDecimal.ZERO;
-        BigDecimal add = FieldValidator.validateDigitField(addExpenses) ? new BigDecimal(addExpenses) : BigDecimal.ZERO;
-            return String.format("%.2f",
-                    hotel
-                    .add(daily)
-                    .add(fuel)
-                    .add(add));
+        BigDecimal hotel = Objects.requireNonNullElse(hotelExpenses, BigDecimal.ZERO);
+        BigDecimal daily = Objects.requireNonNullElse(dailyExpenses, BigDecimal.ZERO);
+        BigDecimal fuel = Objects.requireNonNullElse(totalFuelExpenses, BigDecimal.ZERO);
+        BigDecimal add = Objects.requireNonNullElse(addExpenses, BigDecimal.ZERO);
+        hotel = BigDecValidator.asignZeroIfLessThanOne(hotel);
+        fuel = BigDecValidator.asignZeroIfLessThanOne(fuel);
+        daily = BigDecValidator.asignZeroIfLessThanOne(daily);
+        add = BigDecValidator.asignZeroIfLessThanOne(add);
 
+            return hotel.add(daily).add(fuel).add(add);
     }
 
-    public static String calcDailyMoney(String numberOfDays, String daysInHotel) {
+    public static BigDecimal calcDailyMoney(BigDecimal numberOfDays, BigDecimal daysInHotel) {
         //nights in hotel * daily money for nightstay + (total days - nights in hotel = nights without hotel * daily money without night stay)
-        String result = "0.0";
-        String nightsInHotel = daysInHotel;
-        if (numberOfDays == null || !FieldValidator.validateDigitField(numberOfDays)) {
-            return result;
+
+        BigDecimal result;
+        BigDecimal hotel = Objects.requireNonNullElse(daysInHotel, BigDecimal.ZERO);
+        BigDecimal days = Objects.requireNonNullElse(numberOfDays, BigDecimal.ZERO);
+        hotel = BigDecValidator.asignZeroIfLessThanOne(hotel);
+        days = BigDecValidator.asignZeroIfLessThanOne(days);
+
+        if (BigDecValidator.isFirstSmallerThanSecond(days, hotel)) {
+            result = BigDecimal.ZERO;
+        } else {
+            BigDecimal dailyMoneyWithNightStay = hotel.multiply(BigDecimal.valueOf(Config.DAILY_WITH_NIGHT_STAY));
+            BigDecimal dailyMoneyWithoutNightStay = (days.subtract(hotel)).multiply(BigDecimal.valueOf(Config.DAILY_WITHOUT_NIGHT_STAY));
+            dailyMoneyWithoutNightStay = BigDecValidator.asignZeroIfLessThanOne(dailyMoneyWithoutNightStay);
+            result = dailyMoneyWithNightStay.add(dailyMoneyWithoutNightStay);
         }
-        if (daysInHotel == null || !FieldValidator.validateDigitField(daysInHotel)) {
-            nightsInHotel = "0";
-        }
-        BigDecimal dailyMoneyWithNightStay = new BigDecimal(nightsInHotel).multiply(BigDecimal.valueOf(Config.DAILY_WITH_NIGHT_STAY));
-        BigDecimal dailyMoneyWithoutNightStay = (new BigDecimal(numberOfDays).subtract(new BigDecimal(nightsInHotel))).multiply(BigDecimal.valueOf(Config.DAILY_WITHOUT_NIGHT_STAY));
-        return dailyMoneyWithNightStay.add(dailyMoneyWithoutNightStay).toString();
+
+        return result;
     }
 
-    public static String calculateTotalNightStayExpense(String numberOfNightsStayed, String nightStayPrice) {
-        if (numberOfNightsStayed == null || nightStayPrice == null ||
-                !FieldValidator.validateDigitField(numberOfNightsStayed) || !FieldValidator.validateDigitField(nightStayPrice)) {
-            return "0";
-        }
-        BigDecimal total = new BigDecimal(numberOfNightsStayed).multiply(new BigDecimal(nightStayPrice));
-        return total.toString();
+    public static BigDecimal calculateTotalNightStayExpense(BigDecimal numberOfNightsStayed, BigDecimal nightStayPrice) {
+        BigDecimal nights = Objects.requireNonNullElse(numberOfNightsStayed, BigDecimal.ZERO);
+        BigDecimal cost = Objects.requireNonNullElse(nightStayPrice, BigDecimal.ZERO);
+        nights = BigDecValidator.asignZeroIfLessThanOne(nights);
+        cost = BigDecValidator.asignZeroIfLessThanOne(cost);
+
+        return nights.multiply(cost);
     }
 }
