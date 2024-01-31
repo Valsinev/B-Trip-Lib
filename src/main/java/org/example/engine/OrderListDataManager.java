@@ -167,7 +167,7 @@ public class OrderListDataManager {
 
         dataManager.dataAdder(OrderTextCoordinates.fullNameCoordinates, form.getFullName());
         dataManager.dataAdder(OrderTextCoordinates.fullNameAndEmployeePositionCoordinates, String.format("%s, %s", form.getFullName(), form.getPosition()));
-        dataManager.dataAdder(OrderTextCoordinates.numberDocumentsCoordinates, String.valueOf(form.getNumberDocuments()));
+        dataManager.dataAdder(OrderTextCoordinates.numberDocumentsCoordinates, String.valueOf(form.getNumberDocuments() == 0 ? "" : form.getNumberDocuments()));
         dataManager.dataAdder(OrderTextCoordinates.startCityCoordinates, form.getStartDestination());
         dataManager.dataAdder(OrderTextCoordinates.endCityCoordinates, form.getEndDestination());
         dataManager.dataAdder(OrderTextCoordinates.numberOfDaysCoordinates, String.valueOf(form.getNumberOfDays()));
