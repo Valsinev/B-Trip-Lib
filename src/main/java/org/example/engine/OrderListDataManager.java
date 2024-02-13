@@ -59,6 +59,39 @@ public class OrderListDataManager {
         sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
     }
 
+    public void getTripWithOtherTransportWithoutHotel() {
+        DataManager dataManager = new DataManager(form, commonOrderData());
+        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(Config.DAILY_WITHOUT_NIGHT_STAY));
+        dataManager.dataAdder(OrderTextCoordinates.otherTransportCoordinates, String.format("%.2f", form.getOtherTransportExpenses()));
+
+        BigDecimal dailyExpenses = ExpenseCalculator.calcDailyMoney(form.getNumberOfDays(), form.getNumberOfNightsStayed());
+        BigDecimal total = ExpenseCalculator.calculateTotalExpenses(BigDecimal.ZERO, dailyExpenses, form.getOtherTransportExpenses(), form.getAdditionalExpenses());
+        dataManager.dataAdder(OrderTextCoordinates.totalSumCoordinates, String.format("%.2f", total));
+
+        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
+    }
+
+    public void getTripWithOtherTransportWithHotel() {
+        DataManager dataManager = new DataManager(form, commonOrderData());
+        //if there is last day 20
+        if (form.getIsTravelOnLastDay()) {
+            dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, "    /" +Config.DAILY_WITHOUT_NIGHT_STAY);
+        }
+
+        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(Config.DAILY_WITH_NIGHT_STAY));
+
+        BigDecimal dailyExpenses = ExpenseCalculator.calcDailyMoney(form.getNumberOfDays(), form.getNumberOfNightsStayed());
+        BigDecimal hotelExpenses = ExpenseCalculator.calculateTotalNightStayExpense(form.getNumberOfNightsStayed(), form.getNightStayPrice());
+        BigDecimal fuelExpenses = form.getOtherTransportExpenses();
+        BigDecimal total = ExpenseCalculator.calculateTotalExpenses(hotelExpenses, dailyExpenses, fuelExpenses, form.getAdditionalExpenses());
+        dataManager.dataAdder(OrderTextCoordinates.totalSumCoordinates, String.format("%.2f", total));
+        dataManager.dataAdder(OrderTextCoordinates.totalNightStayMoneyCoordinates, String.format("%.2f", hotelExpenses));
+        dataManager.dataAdder(OrderTextCoordinates.nightStayMoneyCoordinates, String.format("%.2f", form.getNightStayPrice()));
+
+        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
+    }
+
+
     public void getTripWithoutVehicleWithHotel() {
         DataManager dataManager = new DataManager(form, commonOrderData());
         //if there is last day 20

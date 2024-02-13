@@ -34,6 +34,9 @@ public interface BusinessTripForm {
     BigDecimal getFuelPrice();
     BigDecimal getKilometers();
 
+    boolean getIsTravelWithOtherTransport();
+    BigDecimal getOtherTransportExpenses();
+
     int getFromWhichDayField();
 
     int getToWhichDayField();

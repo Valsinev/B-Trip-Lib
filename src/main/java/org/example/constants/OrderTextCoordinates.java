@@ -80,6 +80,9 @@ public class OrderTextCoordinates {
     public static final List<TextCords> totalFuelConsumedCoordinates  = List.of(
             new TextCords(630, 455)
     );
+    public static List<TextCords> otherTransportCoordinates = List.of(
+            new TextCords(140, 365)
+    );
     public static final List<TextCords> totalSumForTransportCoordinates  = List.of(
             new TextCords(140, 513)
     );
