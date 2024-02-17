@@ -80,6 +80,9 @@ public class OrderTextCoordinates {
     public static final List<TextCords> totalFuelConsumedCoordinates  = List.of(
             new TextCords(630, 455)
     );
+    public static List<TextCords> otherTransportCoordinates = List.of(
+            new TextCords(140, 365)
+    );
     public static final List<TextCords> totalSumForTransportCoordinates  = List.of(
             new TextCords(140, 513)
     );
@@ -101,7 +104,7 @@ public class OrderTextCoordinates {
     public static final List<TextCords> totalNightStayMoneyCoordinates = List.of(
             new TextCords(140, 835)
     );
-    public static final List<TextCords> days  = List.of(
+    public static final List<TextCords> arrivedDateCoordinates  = List.of(
             new TextCords(240, 1640),  //day1
             new TextCords(240, 1886),  //day2
             new TextCords(240, 2100),  //day3
@@ -111,7 +114,7 @@ public class OrderTextCoordinates {
             new TextCords(240, 2953),  //day7
             new TextCords(240, 3168)   //day8
     );
-    public static final List<TextCords> days2  = List.of(
+    public static final List<TextCords> departedDateCoordinates  = List.of(
             new TextCords(740, 1528),  //day1
             new TextCords(740, 1814),  //day2
             new TextCords(740, 2030),  //day3

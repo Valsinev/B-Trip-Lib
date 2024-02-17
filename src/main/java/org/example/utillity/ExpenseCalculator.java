@@ -40,6 +40,22 @@ public class ExpenseCalculator {
             return hotel.add(daily).add(fuel).add(add);
     }
 
+    public static BigDecimal calculateTotalExpenses(BigDecimal hotelExpenses, BigDecimal dailyExpenses, BigDecimal totalFuelExpenses, BigDecimal addExpenses, BigDecimal otherTransportExpenses) {
+
+        BigDecimal hotel = Objects.requireNonNullElse(hotelExpenses, BigDecimal.ZERO);
+        BigDecimal daily = Objects.requireNonNullElse(dailyExpenses, BigDecimal.ZERO);
+        BigDecimal fuel = Objects.requireNonNullElse(totalFuelExpenses, BigDecimal.ZERO);
+        BigDecimal add = Objects.requireNonNullElse(addExpenses, BigDecimal.ZERO);
+        BigDecimal other = Objects.requireNonNullElse(otherTransportExpenses, BigDecimal.ZERO);
+        hotel = BigDecValidator.asignZeroIfLessThanOne(hotel);
+        fuel = BigDecValidator.asignZeroIfLessThanOne(fuel);
+        daily = BigDecValidator.asignZeroIfLessThanOne(daily);
+        add = BigDecValidator.asignZeroIfLessThanOne(add);
+        other = BigDecValidator.asignZeroIfLessThanOne(other);
+
+        return hotel.add(daily).add(fuel).add(add).add(other);
+    }
+
     public static BigDecimal calcDailyMoney(BigDecimal numberOfDays, BigDecimal daysInHotel) {
         //nights in hotel * daily money for nightstay + (total days - nights in hotel = nights without hotel * daily money without night stay)
 

@@ -20,6 +20,10 @@ class ExpenseCalculatorTest {
         result = ExpenseCalculator.calculateTotalFuelPrice(BigDecimal.valueOf(0), BigDecimal.valueOf(10), BigDecimal.valueOf(3)).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);
 
+        expected = BigDecimal.valueOf(19.69).setScale(2, RoundingMode.FLOOR);
+        result = ExpenseCalculator.calculateTotalFuelPrice(BigDecimal.valueOf(65), BigDecimal.valueOf(10), BigDecimal.valueOf(3.03)).setScale(2, RoundingMode.FLOOR);
+        Assertions.assertEquals(expected, result);
+
         expected = BigDecimal.valueOf(0).setScale(2, RoundingMode.FLOOR);
         result = ExpenseCalculator.calculateTotalFuelPrice(BigDecimal.valueOf(500), BigDecimal.valueOf(0), BigDecimal.valueOf(3)).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);

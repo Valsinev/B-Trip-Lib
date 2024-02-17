@@ -2,6 +2,7 @@ package org.example.engine;
 
 import org.example.constants.Config;
 import org.example.constants.TravelListTextCoordinates;
+import org.example.utillity.ExpenseCalculator;
 import org.example.utillity.ImageDrawer;
 
 import javax.imageio.ImageIO;
@@ -39,22 +40,31 @@ public class TravelListDataManager {
     }
 
     public void getTravelWithoutHotel() {
-        DataManager dataManager = new DataManager(form, commonTravelData());
-        dateReasonKilometersAdderWithoutNightStay(dataManager);
 
-        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
+        BigDecimal totalFuelExpenses = ExpenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice());
+        //if total fuel expenses are 0 don't generate travel list
+        if (totalFuelExpenses.compareTo(BigDecimal.ZERO) > 0) {
+            DataManager dataManager = new DataManager(form, commonTravelData());
+            dateReasonKilometersAdderWithoutNightStay(dataManager);
+
+            sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
+        }
     }
 
     public void getTravelWithHotel() {
-        DataManager dataManager = new DataManager(form, commonTravelData());
-        dateReasonKilometersAdderWithNightStay(dataManager);
 
-        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
+        BigDecimal totalFuelExpenses = ExpenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice());
+        //if total fuel expenses are 0 don't generate travel list
+        if (totalFuelExpenses.compareTo(BigDecimal.ZERO) > 0) {
+            DataManager dataManager = new DataManager(form, commonTravelData());
+            dateReasonKilometersAdderWithNightStay(dataManager);
+
+            sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
+        }
     }
 
     private List<ImgData> commonTravelData() {
         DataManager dataManager = new DataManager(form, new ArrayList<>());
-
         dataManager.dataAdder(TravelListTextCoordinates.fullNameCoordinates, form.getFullName());
         dataManager.dataAdder(TravelListTextCoordinates.personalNumberCoordinates, form.getPersonalNumber());
         dataManager.dataAdder(TravelListTextCoordinates.vehicleMakeAndModelCoordinates,  String.format("%s %s", form.getMake(), form.getModel()));
