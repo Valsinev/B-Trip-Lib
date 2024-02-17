@@ -14,7 +14,9 @@ public class DataManager {
     }
 
     public void dataAdder(List<TextCords> cords, String text) {
-        cords.forEach(textCords -> data.add(new ImgData(text, textCords.xCord(), textCords.yCord())));
+        if(text != null && !text.trim().isEmpty()) {
+            cords.forEach(textCords -> data.add(new ImgData(text, textCords.xCord(), textCords.yCord())));
+        }
     }
 
     public void dataAdder(TextCords cords, String text) {
