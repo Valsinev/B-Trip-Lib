@@ -1,13 +1,15 @@
 package org.example.engine;
 
+import org.example.constants.IConfiguration;
+
 import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class TripTypeSelector {
-    public static void select(BusinessTripForm form, List<BufferedImage> sheetStorage) {
+    public static void select(BusinessTripForm form, List<BufferedImage> sheetStorage, IConfiguration configuration) {
 
-        OrderListDataManager orderDataManager = new OrderListDataManager(form, sheetStorage);
-        TravelListDataManager travelDataManager = new TravelListDataManager(form, sheetStorage);
+        OrderListDataManager orderDataManager = new OrderListDataManager(form, sheetStorage, configuration);
+        TravelListDataManager travelDataManager = new TravelListDataManager(form, sheetStorage, configuration);
 
 
         boolean isTravelWithOtherTransport = form.getIsTravelWithOtherTransport();

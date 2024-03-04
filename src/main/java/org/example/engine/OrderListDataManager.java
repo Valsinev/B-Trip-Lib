@@ -19,16 +19,18 @@ public class OrderListDataManager {
 
     private final BusinessTripForm form;
     private final List<BufferedImage> sheetStorage;
+    private final IConfiguration config;
 
     BufferedImage blankImage;
     BufferedImage blankAdditionalOrderDaysImage;
 
 
-    public OrderListDataManager(BusinessTripForm form, List<BufferedImage> sheetStorage) {
+    public OrderListDataManager(BusinessTripForm form, List<BufferedImage> sheetStorage, IConfiguration config) {
 
 
         this.form = form;
         this.sheetStorage = sheetStorage;
+        this.config = config;
 
         // Using try-with-resources to automatically close the input stream
         try (
@@ -53,56 +55,32 @@ public class OrderListDataManager {
 
     public void getTripWithoutVehicleWithoutHotel() {
         DataManager dataManager = new DataManager(form, commonOrderData());
-        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(Config.DAILY_WITHOUT_NIGHT_STAY));
+        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(config.getDailyMoneyWithoutHotel()));
 
-        BigDecimal dailyExpenses = ExpenseCalculator.calcDailyMoney(form.getNumberOfDays(), form.getNumberOfNightsStayed());
-        BigDecimal total = ExpenseCalculator.calculateTotalExpenses(BigDecimal.ZERO, dailyExpenses, BigDecimal.ZERO, form.getAdditionalExpenses());
-        dataManager.dataAdder(OrderTextCoordinates.totalSumCoordinates, String.format("%.2f", total.setScale(2, RoundingMode.FLOOR)));
-
-        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
+        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, config.getFont(), config.getFontColor()));
     }
 
     public void getTripWithOtherTransportWithoutHotel() {
         DataManager dataManager = new DataManager(form, commonOrderData());
-        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(Config.DAILY_WITHOUT_NIGHT_STAY));
-        BigDecimal dailyExpenses = ExpenseCalculator.calcDailyMoney(form.getNumberOfDays(), form.getNumberOfNightsStayed());
+        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(config.getDailyMoneyWithoutHotel()));
 
-        if (form.getOtherTransportExpenses().compareTo(BigDecimal.ZERO) > 0) {
-            dataManager.dataAdder(OrderTextCoordinates.otherTransportCoordinates, String.format("%.2f", form.getOtherTransportExpenses()));
-            BigDecimal total = ExpenseCalculator.calculateTotalExpenses(BigDecimal.ZERO, dailyExpenses, form.getOtherTransportExpenses(), form.getAdditionalExpenses());
-            dataManager.dataAdder(OrderTextCoordinates.totalSumCoordinates, String.format("%.2f", total.setScale(2, RoundingMode.FLOOR)));
-
-        }
         numberOfOrdersCreation(form.getDays(), dataManager.data);
     }
 
     public void getTripWithOtherTransportWithHotel() {
         DataManager dataManager = new DataManager(form, commonOrderData());
 
-        BigDecimal hotelExpenses = ExpenseCalculator.calculateTotalNightStayExpense(form.getNumberOfNightsStayed(), form.getNightStayPrice());
-        BigDecimal dailyExpenses = ExpenseCalculator.calcDailyMoney(form.getNumberOfDays(), form.getNumberOfNightsStayed());
         //if there is last day 20
         if (form.getIsTravelOnLastDay()) {
-            dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, "    /" +Config.DAILY_WITHOUT_NIGHT_STAY);
+            dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, "    /" + config.getDailyMoneyWithoutHotel());
         }
-        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(Config.DAILY_WITH_NIGHT_STAY));
+        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(config.getDailyMoneyWithHotel()));
 
-        boolean isHotelExpensesPositive = hotelExpenses.compareTo(BigDecimal.ZERO) > 0;
-        if (isHotelExpensesPositive) {
-            dataManager.dataAdder(OrderTextCoordinates.totalNightStayMoneyCoordinates, String.format("%.2f", hotelExpenses.setScale(2, RoundingMode.FLOOR)));
-        }
-        boolean isDailyExpensesPositive = dailyExpenses.compareTo(BigDecimal.ZERO) > 0;
-        boolean isOtherTransportExpPositive = form.getOtherTransportExpenses().compareTo(BigDecimal.ZERO) > 0;
-        if (isDailyExpensesPositive && isOtherTransportExpPositive) {
-            BigDecimal fuelExpenses = form.getOtherTransportExpenses();
-            BigDecimal total = ExpenseCalculator.calculateTotalExpenses(hotelExpenses, dailyExpenses, fuelExpenses, form.getAdditionalExpenses());
-            dataManager.dataAdder(OrderTextCoordinates.totalSumCoordinates, String.format("%.2f", total.setScale(2, RoundingMode.FLOOR)));
-        }
         if (form.getNightStayPrice().compareTo(BigDecimal.ZERO) > 0) {
             dataManager.dataAdder(OrderTextCoordinates.nightStayMoneyCoordinates, String.format("%.2f", form.getNightStayPrice()));
         }
 
-        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
+        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, config.getFont(), config.getFontColor()));
     }
 
 
@@ -110,22 +88,15 @@ public class OrderListDataManager {
         DataManager dataManager = new DataManager(form, commonOrderData());
         //if there is last day 20
         if (form.getIsTravelOnLastDay()) {
-            dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, "    /" +Config.DAILY_WITHOUT_NIGHT_STAY);
+            dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, "    /" + config.getDailyMoneyWithoutHotel());
         }
 
-        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(Config.DAILY_WITH_NIGHT_STAY));
+        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(config.getDailyMoneyWithHotel()));
 
-        BigDecimal dailyExpenses = ExpenseCalculator.calcDailyMoney(form.getNumberOfDays(), form.getNumberOfNightsStayed());
-        BigDecimal hotelExpenses = ExpenseCalculator.calculateTotalNightStayExpense(form.getNumberOfNightsStayed(), form.getNightStayPrice());
-        BigDecimal fuelExpenses = BigDecimal.ZERO;
-        BigDecimal total = ExpenseCalculator.calculateTotalExpenses(hotelExpenses, dailyExpenses, fuelExpenses, form.getAdditionalExpenses());
-        if (hotelExpenses.compareTo(BigDecimal.ZERO) > 0) {
-            dataManager.dataAdder(OrderTextCoordinates.totalSumCoordinates, String.format("%.2f", total.setScale(2, RoundingMode.FLOOR)));
-            dataManager.dataAdder(OrderTextCoordinates.totalNightStayMoneyCoordinates, String.format("%.2f", hotelExpenses.setScale(2, RoundingMode.FLOOR)));
-            dataManager.dataAdder(OrderTextCoordinates.nightStayMoneyCoordinates, String.format("%.2f", form.getNightStayPrice()));
-        }
+        dataManager.dataAdder(OrderTextCoordinates.nightStayMoneyCoordinates, String.format("%.2f", form.getNightStayPrice()));
 
-        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
+
+        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, config.getFont(), config.getFontColor()));
     }
 
 
@@ -134,19 +105,7 @@ public class OrderListDataManager {
         //populate dataManager with common travel data
         DataManager orderDataManager = new DataManager(form, commonOrderDataWithVehicle());
 
-        orderDataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(Config.DAILY_WITHOUT_NIGHT_STAY));
-
-        BigDecimal daysInHotel = BigDecimal.ZERO;
-        BigDecimal dailyTotal = ExpenseCalculator.calcDailyMoney(form.getNumberOfDays(), daysInHotel);
-        BigDecimal fuelTotal = ExpenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice());
-        BigDecimal hotelExpenses = BigDecimal.ZERO;
-        if (fuelTotal.compareTo(BigDecimal.ZERO) > 0) {
-            orderDataManager.dataAdder(OrderTextCoordinates.totalSumCoordinates, String.format("%.2f",
-                    ExpenseCalculator.calculateTotalExpenses(
-                                    hotelExpenses, dailyTotal, fuelTotal, form.getAdditionalExpenses(), form.getOtherTransportExpenses())
-                            .setScale(2, RoundingMode.FLOOR)));
-        }
-
+        orderDataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(config.getDailyMoneyWithoutHotel()));
 
         numberOfOrdersCreation(form.getDays(), orderDataManager.data);
     }
@@ -157,29 +116,20 @@ public class OrderListDataManager {
         //populate dataManager with common travel data
         DataManager dataManager = new DataManager(form, commonOrderDataWithVehicle());
 
-        BigDecimal fuelTotal = ExpenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice());
-        BigDecimal nightStayTotal = ExpenseCalculator.calculateTotalNightStayExpense(form.getNumberOfNightsStayed(), form.getNightStayPrice());
+        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(config.getDailyMoneyWithHotel()));
 
-        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates, String.valueOf(Config.DAILY_WITH_NIGHT_STAY));
-
-        if ((fuelTotal.compareTo(BigDecimal.ZERO) > 0) && (nightStayTotal.compareTo(BigDecimal.ZERO) > 0)) {
-            BigDecimal dailyTotal = ExpenseCalculator.calcDailyMoney(form.getNumberOfDays(), form.getNumberOfNightsStayed());
-            dataManager.dataAdder(OrderTextCoordinates.nightStayMoneyCoordinates, String.format("%.2f", form.getNightStayPrice()));
-            dataManager.dataAdder(OrderTextCoordinates.totalNightStayMoneyCoordinates, String.format("%.2f", nightStayTotal.setScale(2, RoundingMode.FLOOR)));
-            BigDecimal total = ExpenseCalculator.calculateTotalExpenses(nightStayTotal, dailyTotal, fuelTotal, form.getAdditionalExpenses());
-            dataManager.dataAdder(OrderTextCoordinates.totalSumCoordinates, String.format("%.2f", total.setScale(2, RoundingMode.FLOOR)));
-        }
+        dataManager.dataAdder(OrderTextCoordinates.nightStayMoneyCoordinates, String.format("%.2f", form.getNightStayPrice()));
 
         if (form.getIsTravelOnLastDay()) {
             dataManager.dataAdder(OrderTextCoordinates.departedDateCoordinates.get(0), String.format("%02d.%02d.%d", form.getDays().get(form.getDays().size() - 1), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
-            dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates,"    /" + Config.DAILY_WITHOUT_NIGHT_STAY);
+            dataManager.dataAdder(OrderTextCoordinates.dailyMoneyCoordinates,"    /" + config.getDailyMoneyWithoutHotel());
         }
         if (form.getIsTravelOnFirstDay()) {
             dataManager.dataAdder(OrderTextCoordinates.arrivedDateCoordinates.get(0), String.format("%02d.%02d.%d", form.getDays().get(0), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
             dataManager.dataAdder(OrderTextCoordinates.destinationCoordinates.get(0), form.getEndDestination());
 
         }
-        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
+        sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, config.getFont(), config.getFontColor()));
     }
 
     //add all shared vehicle data in order list
@@ -226,9 +176,6 @@ public class OrderListDataManager {
         dataManager.dataAdder(OrderTextCoordinates.businessTripFNumberCoordinates, form.getBranchIn());
         dataManager.dataAdder(OrderTextCoordinates.difficultiesCoordinates, TextConstants.DOESNT_ENCOUNTER);
 
-        dataManager.dataAdder(OrderTextCoordinates.dailyMoneyTotalSumCoordinates, String.format("%.2f", ExpenseCalculator.calcDailyMoney(form.getNumberOfDays(), form.getNumberOfNightsStayed())));
-
-
         return dataManager.data;
     }
 
@@ -237,7 +184,7 @@ public class OrderListDataManager {
     //the problem is that order list has limited slots for dates so this method creates number of orders and set their data + data for
     //every travel day and destination
     private void numberOfOrdersCreation(List<Integer> days, List<ImgData> data) {
-        int daysInOrder = Config.NUMBER_OF_DAYS_IN_ONE_ORDER;
+        int daysInOrder = config.getNumberOfDaysInOneOrder();
         int ordersNeeded = days.size() > daysInOrder ? 2 : 1;
 
         if (ordersNeeded == 2) {
@@ -288,7 +235,7 @@ public class OrderListDataManager {
                 departedDateCoordinates,
                 destinationCoordinates);
         //draw all the data to the image
-        BufferedImage currentImage = ImageDrawer.drawDataOnBackgroundImg(currentManager.data, blankImage, Config.FONT, Config.FONT_COLOR);
+        BufferedImage currentImage = ImageDrawer.drawDataOnBackgroundImg(currentManager.data, blankImage, config.getFont(), config.getFontColor());
         //save the image in the collection of images
         sheetStorage.add(currentImage);
     }

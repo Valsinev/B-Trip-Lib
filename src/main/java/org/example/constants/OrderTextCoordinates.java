@@ -15,20 +15,23 @@ public class OrderTextCoordinates {
     public static final List<TextCords> numberOfDaysCoordinates  = List.of(
             new TextCords(1470, 560)
     );
+
+    @Deprecated
     public static final List<TextCords> dailyMoneyTotalSumCoordinates  = List.of(
             new TextCords(140, 740)
     );
+    @Deprecated
     public static final List<TextCords> totalSumCoordinates  = List.of(
             new TextCords(140, 970)
     );
     public static final List<TextCords> startDateCoordinates  = List.of(
             new TextCords(1990, 246),
+            new TextCords(1350, 1390),
             new TextCords(1655, 560)
     );
     public static final List<TextCords> endDateCoordinates  = List.of(
             new TextCords(210, 1320),
             new TextCords(210, 3310),
-            new TextCords(1350, 1390),
             new TextCords(1980, 556),
             new TextCords(1350, 2880),
             new TextCords(1350, 3310)
@@ -72,7 +75,7 @@ public class OrderTextCoordinates {
             new TextCords(2200, 965)
     );
     public static final List<TextCords> kilometersCoordinates  = List.of(
-            new TextCords(42, 455)
+            new TextCords(466, 416)
     );
     public static final List<TextCords> kilometersDividedBy100Coordinates  = List.of(
             new TextCords(250, 455)
@@ -80,6 +83,7 @@ public class OrderTextCoordinates {
     public static final List<TextCords> totalFuelConsumedCoordinates  = List.of(
             new TextCords(630, 455)
     );
+    @Deprecated
     public static List<TextCords> otherTransportCoordinates = List.of(
             new TextCords(140, 365)
     );
@@ -101,6 +105,7 @@ public class OrderTextCoordinates {
     public static final List<TextCords> numberDocumentsCoordinates  = List.of(
             new TextCords(377, 1015)
     );
+    @Deprecated
     public static final List<TextCords> totalNightStayMoneyCoordinates = List.of(
             new TextCords(140, 835)
     );

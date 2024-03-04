@@ -96,6 +96,7 @@ class ExpenseCalculatorTest {
         Assertions.assertEquals(expected, result);
     }
 
+    @Deprecated
     @Test
     void testCalculateTotalExpenses() {
 
@@ -164,6 +165,7 @@ class ExpenseCalculatorTest {
         Assertions.assertEquals(expected, result);
     }
 
+    @Deprecated
     @Test
     void testCalcDailyMoney() {
 
@@ -212,6 +214,7 @@ class ExpenseCalculatorTest {
         Assertions.assertEquals(expected, result);
     }
 
+    @Deprecated
     @Test
     void testCalculateTotalNightStayExpense() {
 

@@ -1,6 +1,7 @@
 package org.example.engine;
 
 import org.example.constants.Config;
+import org.example.constants.IConfiguration;
 import org.example.constants.TravelListTextCoordinates;
 import org.example.utillity.ExpenseCalculator;
 import org.example.utillity.ImageDrawer;
@@ -17,12 +18,14 @@ import java.util.List;
 public class TravelListDataManager {
     private final BusinessTripForm form;
     private final List<BufferedImage> sheetStorage;
+    private final IConfiguration config;
     private BufferedImage blankImage;
 
-    public TravelListDataManager(BusinessTripForm form, List<BufferedImage> sheetStorage) {
+    public TravelListDataManager(BusinessTripForm form, List<BufferedImage> sheetStorage, IConfiguration config) {
 
         this.form = form;
         this.sheetStorage = sheetStorage;
+        this.config = config;
 
         // Using try-with-resources to automatically close the input stream
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("img/travel.png")) {
@@ -47,7 +50,7 @@ public class TravelListDataManager {
             DataManager dataManager = new DataManager(form, commonTravelData());
             dateReasonKilometersAdderWithoutNightStay(dataManager);
 
-            sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
+            sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, config.getFont(), config.getFontColor()));
         }
     }
 
@@ -59,7 +62,7 @@ public class TravelListDataManager {
             DataManager dataManager = new DataManager(form, commonTravelData());
             dateReasonKilometersAdderWithNightStay(dataManager);
 
-            sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, Config.FONT, Config.FONT_COLOR));
+            sheetStorage.add(ImageDrawer.drawDataOnBackgroundImg(dataManager.data, blankImage, config.getFont(), config.getFontColor()));
         }
     }
 

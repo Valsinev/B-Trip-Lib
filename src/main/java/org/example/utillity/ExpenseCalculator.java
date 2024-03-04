@@ -26,6 +26,7 @@ public class ExpenseCalculator {
         return distance.divide(BigDecimal.valueOf(100.0), 2, RoundingMode.FLOOR).multiply(costFor100);
     }
 
+    @Deprecated
     public static BigDecimal calculateTotalExpenses(BigDecimal hotelExpenses, BigDecimal dailyExpenses, BigDecimal totalFuelExpenses, BigDecimal addExpenses) {
 
         BigDecimal hotel = Objects.requireNonNullElse(hotelExpenses, BigDecimal.ZERO);
@@ -40,6 +41,7 @@ public class ExpenseCalculator {
             return hotel.add(daily).add(fuel).add(add);
     }
 
+    @Deprecated
     public static BigDecimal calculateTotalExpenses(BigDecimal hotelExpenses, BigDecimal dailyExpenses, BigDecimal totalFuelExpenses, BigDecimal addExpenses, BigDecimal otherTransportExpenses) {
 
         BigDecimal hotel = Objects.requireNonNullElse(hotelExpenses, BigDecimal.ZERO);
@@ -56,6 +58,7 @@ public class ExpenseCalculator {
         return hotel.add(daily).add(fuel).add(add).add(other);
     }
 
+    @Deprecated
     public static BigDecimal calcDailyMoney(BigDecimal numberOfDays, BigDecimal daysInHotel) {
         //nights in hotel * daily money for nightstay + (total days - nights in hotel = nights without hotel * daily money without night stay)
 
@@ -77,6 +80,7 @@ public class ExpenseCalculator {
         return result;
     }
 
+    @Deprecated
     public static BigDecimal calculateTotalNightStayExpense(BigDecimal numberOfNightsStayed, BigDecimal nightStayPrice) {
         BigDecimal nights = Objects.requireNonNullElse(numberOfNightsStayed, BigDecimal.ZERO);
         BigDecimal cost = Objects.requireNonNullElse(nightStayPrice, BigDecimal.ZERO);

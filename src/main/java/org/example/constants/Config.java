@@ -2,6 +2,7 @@ package org.example.constants;
 
 import java.awt.*;
 
+@Deprecated
 public class Config {
     public static final long DAILY_WITH_NIGHT_STAY = 40;
     public static final long DAILY_WITHOUT_NIGHT_STAY = 20;
