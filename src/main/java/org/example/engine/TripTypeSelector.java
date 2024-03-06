@@ -1,15 +1,25 @@
 package org.example.engine;
 
-import org.example.constants.IConfiguration;
+import org.example.configuration.*;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class TripTypeSelector {
-    public static void select(BusinessTripForm form, List<BufferedImage> sheetStorage, IConfiguration configuration) {
+    private IOrderTextCoordinates orderCoordinates;
+    private final IOrderAdditionalDaysCoordinates orderAdditionalDaysCoordinates;
+    private final ITravelListTextCoordinates travelListTextCoordinates;
 
-        OrderListDataManager orderDataManager = new OrderListDataManager(form, sheetStorage, configuration);
-        TravelListDataManager travelDataManager = new TravelListDataManager(form, sheetStorage, configuration);
+    public TripTypeSelector(IOrderTextCoordinates orderCoordinates, IOrderAdditionalDaysCoordinates orderAdditionalDaysCoordinates, ITravelListTextCoordinates travelListTextCoordinates) {
+        this.orderCoordinates = orderCoordinates;
+        this.orderAdditionalDaysCoordinates = orderAdditionalDaysCoordinates;
+        this.travelListTextCoordinates = travelListTextCoordinates;
+    }
+
+    public void select(BusinessTripForm form, List<BufferedImage> sheetStorage, IConfiguration configuration) {
+
+        OrderListDataManager orderDataManager = new OrderListDataManager(form, sheetStorage, configuration, orderCoordinates, orderAdditionalDaysCoordinates);
+        TravelListDataManager travelDataManager = new TravelListDataManager(form, sheetStorage, configuration, travelListTextCoordinates);
 
 
         boolean isTravelWithOtherTransport = form.getIsTravelWithOtherTransport();

@@ -1,8 +1,8 @@
 package org.example.engine;
 
-import org.example.constants.Config;
-import org.example.constants.IConfiguration;
-import org.example.constants.TravelListTextCoordinates;
+import org.example.configuration.BusinessTripForm;
+import org.example.configuration.IConfiguration;
+import org.example.configuration.ITravelListTextCoordinates;
 import org.example.utillity.ExpenseCalculator;
 import org.example.utillity.ImageDrawer;
 
@@ -19,16 +19,18 @@ public class TravelListDataManager {
     private final BusinessTripForm form;
     private final List<BufferedImage> sheetStorage;
     private final IConfiguration config;
+    private final ITravelListTextCoordinates coordinates;
     private BufferedImage blankImage;
 
-    public TravelListDataManager(BusinessTripForm form, List<BufferedImage> sheetStorage, IConfiguration config) {
+    public TravelListDataManager(BusinessTripForm form, List<BufferedImage> sheetStorage, IConfiguration config, ITravelListTextCoordinates coordinates) {
 
         this.form = form;
         this.sheetStorage = sheetStorage;
         this.config = config;
+        this.coordinates = coordinates;
 
         // Using try-with-resources to automatically close the input stream
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("img/travel.png")) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(config.travelImgResourcePath().get())) {
             if (inputStream != null) {
                 blankImage = ImageIO.read(inputStream);
             } else {
@@ -68,15 +70,15 @@ public class TravelListDataManager {
 
     private List<ImgData> commonTravelData() {
         DataManager dataManager = new DataManager(form, new ArrayList<>());
-        dataManager.dataAdder(TravelListTextCoordinates.fullNameCoordinates, form.getFullName());
-        dataManager.dataAdder(TravelListTextCoordinates.personalNumberCoordinates, form.getPersonalNumber());
-        dataManager.dataAdder(TravelListTextCoordinates.vehicleMakeAndModelCoordinates,  String.format("%s %s", form.getMake(), form.getModel()));
-        dataManager.dataAdder(TravelListTextCoordinates.fuelConsumptionFor100Coordinates, String.format("%.2f", form.getCostBy100()));
-        dataManager.dataAdder(TravelListTextCoordinates.vehicleRegNumberCoordinates, form.getRegistrationNumber());
-        dataManager.dataAdder(TravelListTextCoordinates.fuelTypeCoordinates, form.getFuelType());
-        dataManager.dataAdder(TravelListTextCoordinates.kilometersCoordinates, form.getKilometers().toString());
-        dataManager.dataAdder(TravelListTextCoordinates.employerNameCoordinates, form.getHeadEmployeeName());
-        dataManager.dataAdder(TravelListTextCoordinates.monthAndYearCoordinates, String.format("%s/%s", form.getMonthNumber(), form.getWhatYear()));
+        dataManager.dataAdder(coordinates.fullNameCoordinates(), form.getFullName());
+        dataManager.dataAdder(coordinates.personalNumberCoordinates(), form.getPersonalNumber());
+        dataManager.dataAdder(coordinates.vehicleMakeAndModelCoordinates(),  String.format("%s %s", form.getMake(), form.getModel()));
+        dataManager.dataAdder(coordinates.fuelConsumptionFor100Coordinates(), String.format("%.2f", form.getCostBy100()));
+        dataManager.dataAdder(coordinates.vehicleRegNumberCoordinates(), form.getRegistrationNumber());
+        dataManager.dataAdder(coordinates.fuelTypeCoordinates(), form.getFuelType());
+        dataManager.dataAdder(coordinates.kilometersCoordinates(), form.getKilometers().toString());
+        dataManager.dataAdder(coordinates.employerNameCoordinates(), form.getHeadEmployeeName());
+        dataManager.dataAdder(coordinates.monthAndYearCoordinates(), String.format("%s/%s", form.getMonthNumber(), form.getWhatYear()));
         return dataManager.data;
     }
 
@@ -95,7 +97,7 @@ public class TravelListDataManager {
             ) {
                 //start city-end city-start city/reason/
                 dataManager.dataAdder(
-                        TravelListTextCoordinates.destinationAndReasonCoordinates.get(day),
+                        coordinates.destinationAndReasonCoordinates().get(day),
                         String.format("%s-%s-%s/%s/",
                                 form.getStartDestination(),
                                 form.getEndDestination(),
@@ -104,13 +106,13 @@ public class TravelListDataManager {
             }
             //dates
             dataManager.dataAdder(
-                    TravelListTextCoordinates.days.get(day),
+                    coordinates.days().get(day),
                     String.format("%02d.%02d.%d",
                             form.getDays().get(day),
                             Integer.parseInt(form.getMonthNumber()),
                             Integer.parseInt(form.getWhatYear())));
             //kilometers
-            dataManager.dataAdder(TravelListTextCoordinates.kilometersForEachDayCoordinates.get(day), String.valueOf(kilometers));
+            dataManager.dataAdder(coordinates.kilometersForEachDayCoordinates().get(day), String.valueOf(kilometers));
         }
     }
 
@@ -126,32 +128,32 @@ public class TravelListDataManager {
                     form.getEndDestination() != null && !form.getEndDestination().trim().isEmpty() &&
                     form.getReason() != null && !form.getReason().trim().isEmpty()
             ) {
-                dataManager.dataAdder(TravelListTextCoordinates.destinationAndReasonCoordinates.get(0), String.format("%s-%s/%s/", form.getStartDestination(), form.getEndDestination(), form.getReason()));
+                dataManager.dataAdder(coordinates.destinationAndReasonCoordinates().get(0), String.format("%s-%s/%s/", form.getStartDestination(), form.getEndDestination(), form.getReason()));
                 //end city-start city for last day
-                dataManager.dataAdder(TravelListTextCoordinates.destinationAndReasonWithNightStayCoordinates.get(1), String.format("%s-%s", form.getEndDestination(), form.getStartDestination()));
+                dataManager.dataAdder(coordinates.destinationAndReasonWithNightStayCoordinates().get(1), String.format("%s-%s", form.getEndDestination(), form.getStartDestination()));
             }
             //first date
-            dataManager.dataAdder(TravelListTextCoordinates.days.get(0), String.format("%02d.%02d.%d", form.getDays().get(0), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
+            dataManager.dataAdder(coordinates.days().get(0), String.format("%02d.%02d.%d", form.getDays().get(0), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
             //last date
-            dataManager.dataAdder(TravelListTextCoordinates.days.get(1), String.format("%02d.%02d.%d", form.getDays().get(form.getDays().size() - 1), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
+            dataManager.dataAdder(coordinates.days().get(1), String.format("%02d.%02d.%d", form.getDays().get(form.getDays().size() - 1), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
 
             BigDecimal kilometers = form.getKilometers().divide( BigDecimal.valueOf(2), 0, RoundingMode.FLOOR);
             //half of the kilometers
-            dataManager.dataAdder(TravelListTextCoordinates.kilometersForEachDayWithNightStayCoordinates.get(0), String.valueOf(kilometers));
+            dataManager.dataAdder(coordinates.kilometersForEachDayWithNightStayCoordinates().get(0), String.valueOf(kilometers));
             //other half of the kilometers
-            dataManager.dataAdder(TravelListTextCoordinates.kilometersForEachDayWithNightStayCoordinates.get(1), String.valueOf(kilometers));
+            dataManager.dataAdder(coordinates.kilometersForEachDayWithNightStayCoordinates().get(1), String.valueOf(kilometers));
         }
         if (form.getIsTravelOnLastDay() && !form.getIsTravelOnFirstDay()) {
             //end city-start city
             if (form.getStartDestination() != null && !form.getStartDestination().trim().isEmpty() &&
                     form.getEndDestination() != null && !form.getEndDestination().trim().isEmpty()
             ) {
-                dataManager.dataAdder(TravelListTextCoordinates.destinationAndReasonWithNightStayCoordinates.get(0), String.format("%s-%s", form.getEndDestination(), form.getStartDestination()));
+                dataManager.dataAdder(coordinates.destinationAndReasonWithNightStayCoordinates().get(0), String.format("%s-%s", form.getEndDestination(), form.getStartDestination()));
             }
             //last date
-            dataManager.dataAdder(TravelListTextCoordinates.days.get(0), String.format("%02d.%02d.%d", form.getDays().get(form.getDays().size() - 1), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
+            dataManager.dataAdder(coordinates.days().get(0), String.format("%02d.%02d.%d", form.getDays().get(form.getDays().size() - 1), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
             //all kilometers
-            dataManager.dataAdder(TravelListTextCoordinates.kilometersForEachDayWithNightStayCoordinates.get(0), String.valueOf(form.getKilometers()));
+            dataManager.dataAdder(coordinates.kilometersForEachDayWithNightStayCoordinates().get(0), String.valueOf(form.getKilometers()));
         }
         if (form.getIsTravelOnFirstDay() && !form.getIsTravelOnLastDay()) {
             //start city-end city-start city/reason/
@@ -159,12 +161,12 @@ public class TravelListDataManager {
                     form.getEndDestination() != null && !form.getEndDestination().trim().isEmpty() &&
                     form.getReason() != null && !form.getReason().trim().isEmpty()
             ) {
-                dataManager.dataAdder(TravelListTextCoordinates.destinationAndReasonCoordinates.get(0), String.format("%s-%s/%s/", form.getStartDestination(), form.getEndDestination(), form.getReason()));
+                dataManager.dataAdder(coordinates.destinationAndReasonCoordinates().get(0), String.format("%s-%s/%s/", form.getStartDestination(), form.getEndDestination(), form.getReason()));
             }
             //first date
-            dataManager.dataAdder(TravelListTextCoordinates.days.get(0), String.format("%02d.%02d.%d", form.getDays().get(0), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
+            dataManager.dataAdder(coordinates.days().get(0), String.format("%02d.%02d.%d", form.getDays().get(0), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
             //all kilometers
-            dataManager.dataAdder(TravelListTextCoordinates.kilometersForEachDayWithNightStayCoordinates.get(0), String.valueOf(form.getKilometers()));
+            dataManager.dataAdder(coordinates.kilometersForEachDayWithNightStayCoordinates().get(0), String.valueOf(form.getKilometers()));
         }
     }
 }

@@ -1,13 +1,31 @@
 package org.example.utillity;
 
+import org.example.configuration.IConfiguration;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ExpenseCalculatorTest {
 
 
+    static IConfiguration configuration;
+
+    @BeforeAll
+    static void setup() {
+        configuration = mock(IConfiguration.class);
+        when(configuration.getDailyMoneyWithHotel()).thenReturn(40L);
+        when(configuration.getDailyMoneyWithoutHotel()).thenReturn(20L);
+        when(configuration.getFont()).thenReturn(new Font("Arial", Font.ITALIC, 25));
+        when(configuration.getNumberOfDaysInOneOrder()).thenReturn(8);
+        when(configuration.getFontColor()).thenReturn(Color.RED);
+    }
 
     @Test
     void testCalculateTotalFuelPrice() {
@@ -170,47 +188,47 @@ class ExpenseCalculatorTest {
     void testCalcDailyMoney() {
 
         BigDecimal expected = BigDecimal.valueOf(200).setScale(2, RoundingMode.FLOOR);
-        BigDecimal result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(0)).setScale(2, RoundingMode.FLOOR);
+        BigDecimal result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(0), configuration).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);
 
         expected = BigDecimal.valueOf(0).setScale(2, RoundingMode.FLOOR);
-        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(-10), BigDecimal.valueOf(10)).setScale(2, RoundingMode.FLOOR);
+        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(-10), BigDecimal.valueOf(10), configuration).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);
 
         expected = BigDecimal.valueOf(200).setScale(2, RoundingMode.FLOOR);
-        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(-10)).setScale(2, RoundingMode.FLOOR);
+        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(-10), configuration).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);
 
         expected = BigDecimal.valueOf(0).setScale(2, RoundingMode.FLOOR);
-        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(0), BigDecimal.valueOf(10)).setScale(2, RoundingMode.FLOOR);
+        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(0), BigDecimal.valueOf(10), configuration).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);
 
         expected = BigDecimal.valueOf(200).setScale(2, RoundingMode.FLOOR);
-        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(0)).setScale(2, RoundingMode.FLOOR);
+        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(0), configuration).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);
 
         expected = BigDecimal.valueOf(0).setScale(2, RoundingMode.FLOOR);
-        result = ExpenseCalculator.calcDailyMoney(null, BigDecimal.valueOf(10)).setScale(2, RoundingMode.FLOOR);
+        result = ExpenseCalculator.calcDailyMoney(null, BigDecimal.valueOf(10), configuration).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);
 
         expected = BigDecimal.valueOf(200).setScale(2, RoundingMode.FLOOR);
-        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), null).setScale(2, RoundingMode.FLOOR);
+        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), null, configuration).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);
 
         expected = BigDecimal.valueOf(400).setScale(2, RoundingMode.FLOOR);
-        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(10)).setScale(2, RoundingMode.FLOOR);
+        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(10), configuration).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);
 
         expected = BigDecimal.valueOf(220).setScale(2, RoundingMode.FLOOR);
-        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(1)).setScale(2, RoundingMode.FLOOR);
+        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(1), configuration).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);
 
         expected = BigDecimal.valueOf(380).setScale(2, RoundingMode.FLOOR);
-        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(9)).setScale(2, RoundingMode.FLOOR);
+        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(9), configuration).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);
 
         expected = BigDecimal.valueOf(0).setScale(2, RoundingMode.FLOOR);
-        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(15)).setScale(2, RoundingMode.FLOOR);
+        result = ExpenseCalculator.calcDailyMoney(BigDecimal.valueOf(10), BigDecimal.valueOf(15), configuration).setScale(2, RoundingMode.FLOOR);
         Assertions.assertEquals(expected, result);
     }
 

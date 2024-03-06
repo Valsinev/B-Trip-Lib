@@ -1,6 +1,6 @@
 package org.example.utillity;
 
-import org.example.constants.Config;
+import org.example.configuration.IConfiguration;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -59,7 +59,7 @@ public class ExpenseCalculator {
     }
 
     @Deprecated
-    public static BigDecimal calcDailyMoney(BigDecimal numberOfDays, BigDecimal daysInHotel) {
+    public static BigDecimal calcDailyMoney(BigDecimal numberOfDays, BigDecimal daysInHotel, IConfiguration configuration) {
         //nights in hotel * daily money for nightstay + (total days - nights in hotel = nights without hotel * daily money without night stay)
 
         BigDecimal result;
@@ -71,8 +71,8 @@ public class ExpenseCalculator {
         if (BigDecValidator.isFirstSmallerThanSecond(days, hotel)) {
             result = BigDecimal.ZERO;
         } else {
-            BigDecimal dailyMoneyWithNightStay = hotel.multiply(BigDecimal.valueOf(Config.DAILY_WITH_NIGHT_STAY));
-            BigDecimal dailyMoneyWithoutNightStay = (days.subtract(hotel)).multiply(BigDecimal.valueOf(Config.DAILY_WITHOUT_NIGHT_STAY));
+            BigDecimal dailyMoneyWithNightStay = hotel.multiply(BigDecimal.valueOf(configuration.getDailyMoneyWithHotel()));
+            BigDecimal dailyMoneyWithoutNightStay = (days.subtract(hotel)).multiply(BigDecimal.valueOf(configuration.getDailyMoneyWithoutHotel()));
             dailyMoneyWithoutNightStay = BigDecValidator.asignZeroIfLessThanOne(dailyMoneyWithoutNightStay);
             result = dailyMoneyWithNightStay.add(dailyMoneyWithoutNightStay);
         }

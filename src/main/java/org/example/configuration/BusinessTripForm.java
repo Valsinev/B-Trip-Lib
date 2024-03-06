@@ -1,7 +1,9 @@
-package org.example.engine;
+package org.example.configuration;
 
+import java.awt.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface BusinessTripForm {
 
@@ -104,4 +106,7 @@ public interface BusinessTripForm {
     boolean getDay30();
 
     boolean getDay31();
+
+    String getDificulties();
+
 }
