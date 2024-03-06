@@ -1,6 +1,6 @@
 package org.example.utillity;
 
-import org.example.engine.BusinessTripForm;
+import org.example.configuration.BusinessTripForm;
 
 import java.util.ArrayList;
 import java.util.List;

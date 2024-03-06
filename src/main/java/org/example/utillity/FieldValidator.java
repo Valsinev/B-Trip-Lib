@@ -1,7 +1,7 @@
 package org.example.utillity;
 
 
-import org.example.constants.ErrorMessage;
+import org.example.configuration.IErrorMessage;
 
 import java.util.List;
 
@@ -39,12 +39,12 @@ public class FieldValidator {
         }
         return isValid;
     }
-    public static boolean validateNumberOfDaysEqualsInputDays(String numberOfDays, List<Integer> days) {
+    public boolean validateNumberOfDaysEqualsInputDays(String numberOfDays, List<Integer> days, String errorMessage) {
         boolean isValid = true;
         try {
             int numOfDays = Integer.parseInt(numberOfDays);
             if (numOfDays != days.size()) {
-                throw new Exception(ErrorMessage.SELECTED_DAYS_ARENT_EQUAL);
+                throw new Exception(errorMessage);
             }
         } catch (Exception e) {
             isValid = false;

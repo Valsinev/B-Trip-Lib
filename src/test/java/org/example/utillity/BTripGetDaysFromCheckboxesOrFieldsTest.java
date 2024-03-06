@@ -1,6 +1,6 @@
 package org.example.utillity;
 
-import org.example.engine.BusinessTripForm;
+import org.example.configuration.BusinessTripForm;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
