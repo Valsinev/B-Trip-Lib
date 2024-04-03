@@ -12,7 +12,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +28,8 @@ public class OrderListDataManager {
     BufferedImage blankImage;
     BufferedImage blankAdditionalOrderDaysImage;
 
+    ExpenseCalculator expenseCalculator;
+
 
     public OrderListDataManager(
             BusinessTripForm form,
@@ -43,6 +44,7 @@ public class OrderListDataManager {
         this.configuration = configuration;
         this.coordinates = coordinates;
         this.orderAdditionalDaysCoordinates = orderAdditionalDaysCoordinates;
+        expenseCalculator = new ExpenseCalculator(configuration);
 
         if (!configuration.orderImgResourcePath().isPresent()) {
             throw new RuntimeException("Order Img Resource path is null/empty.");
@@ -158,17 +160,17 @@ public class OrderListDataManager {
         dataManager.dataAdder(coordinates.vehicleRegNumberCoordinates(), form.getRegistrationNumber());
         dataManager.dataAdder(coordinates.fuelTypeCoordinates(), form.getFuelType());
         dataManager.dataAdder(coordinates.typeMPSCoordinates(), form.getCategory());
-        BigDecimal totalFuelExpenses = ExpenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice());
+        BigDecimal totalFuelExpenses = expenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice());
 
         //do not populate if fuelPrice, kilometers, costBy100, kilometers/100, total sum are 0
         if (totalFuelExpenses.compareTo(BigDecimal.ZERO) > 0) {
             dataManager.dataAdder(coordinates.fuelConsumptionFor100Coordinates(), String.valueOf(form.getCostBy100()));
             dataManager.dataAdder(coordinates.fuelPriceCoordinates(), String.format("%.2f", form.getFuelPrice()));
             dataManager.dataAdder(coordinates.kilometersCoordinates(), form.getKilometers().toString());
-            dataManager.dataAdder(coordinates.kilometersDividedBy100Coordinates(), String.format("%.2f", form.getKilometers().divide(BigDecimal.valueOf(100.0), 2, RoundingMode.FLOOR)));
-            dataManager.dataAdder(coordinates.totalSumForTransportCoordinates(), String.format("%.2f", totalFuelExpenses.setScale(2, RoundingMode.FLOOR)));
-            BigDecimal fuelConsumed = ExpenseCalculator.calculateFuelConsumed(form.getKilometers(), form.getCostBy100());
-            dataManager.dataAdder(coordinates.totalFuelConsumedCoordinates(), String.valueOf(fuelConsumed.setScale(2, RoundingMode.FLOOR)));
+            dataManager.dataAdder(coordinates.kilometersDividedBy100Coordinates(), String.format("%.2f", form.getKilometers().divide(BigDecimal.valueOf(100.0), configuration.getScale(), configuration.getRoundingMode())));
+            dataManager.dataAdder(coordinates.totalSumForTransportCoordinates(), String.format("%.2f", totalFuelExpenses.setScale(configuration.getScale(), configuration.getRoundingMode())));
+            BigDecimal fuelConsumed = expenseCalculator.calculateFuelConsumed(form.getKilometers(), form.getCostBy100());
+            dataManager.dataAdder(coordinates.totalFuelConsumedCoordinates(), String.valueOf(fuelConsumed.setScale(configuration.getScale(), configuration.getRoundingMode())));
         }
         ////
         return dataManager.data;

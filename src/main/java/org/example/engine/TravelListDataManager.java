@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +21,15 @@ public class TravelListDataManager {
     private final ITravelListTextCoordinates coordinates;
     private BufferedImage blankImage;
 
+    private ExpenseCalculator expenseCalculator;
+
     public TravelListDataManager(BusinessTripForm form, List<BufferedImage> sheetStorage, IConfiguration config, ITravelListTextCoordinates coordinates) {
 
         this.form = form;
         this.sheetStorage = sheetStorage;
         this.config = config;
         this.coordinates = coordinates;
+        this.expenseCalculator = new ExpenseCalculator(config);
 
         // Using try-with-resources to automatically close the input stream
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(config.travelImgResourcePath().get())) {
@@ -46,7 +48,7 @@ public class TravelListDataManager {
 
     public void getTravelWithoutHotel() {
 
-        BigDecimal totalFuelExpenses = ExpenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice());
+        BigDecimal totalFuelExpenses = expenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice());
         //if total fuel expenses are 0 don't generate travel list
         if (totalFuelExpenses.compareTo(BigDecimal.ZERO) > 0) {
             DataManager dataManager = new DataManager(form, commonTravelData());
@@ -58,7 +60,7 @@ public class TravelListDataManager {
 
     public void getTravelWithHotel() {
 
-        BigDecimal totalFuelExpenses = ExpenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice());
+        BigDecimal totalFuelExpenses = expenseCalculator.calculateTotalFuelPrice(form.getKilometers(), form.getCostBy100(), form.getFuelPrice());
         //if total fuel expenses are 0 don't generate travel list
         if (totalFuelExpenses.compareTo(BigDecimal.ZERO) > 0) {
             DataManager dataManager = new DataManager(form, commonTravelData());
@@ -87,7 +89,7 @@ public class TravelListDataManager {
     //loops each day add dates, reason in startCity-endCity-startCity/reason/ format and kilometers on correct coordinates
     private void dateReasonKilometersAdderWithoutNightStay(DataManager dataManager) {
 
-        BigDecimal kilometers = form.getKilometers().divide(form.getNumberOfDays(), 0, RoundingMode.FLOOR);
+        BigDecimal kilometers = form.getKilometers().divide(form.getNumberOfDays(), config.getScale(), config.getRoundingMode());
 
         for (int day = 0; day < form.getDays().size(); day++) {
 
@@ -137,7 +139,7 @@ public class TravelListDataManager {
             //last date
             dataManager.dataAdder(coordinates.days().get(1), String.format("%02d.%02d.%d", form.getDays().get(form.getDays().size() - 1), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
 
-            BigDecimal kilometers = form.getKilometers().divide( BigDecimal.valueOf(2), 0, RoundingMode.FLOOR);
+            BigDecimal kilometers = form.getKilometers().divide( BigDecimal.valueOf(2), config.getScale(), config.getRoundingMode());
             //half of the kilometers
             dataManager.dataAdder(coordinates.kilometersForEachDayWithNightStayCoordinates().get(0), String.valueOf(kilometers));
             //other half of the kilometers

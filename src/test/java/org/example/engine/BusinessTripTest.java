@@ -3,11 +3,13 @@ package org.example.engine;
 
 import org.example.configuration.BusinessTripForm;
 import org.example.configuration.IConfiguration;
+import org.example.utillity.ExpenseCalculator;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -67,6 +69,8 @@ public class BusinessTripTest {
         when(configuration.orderImgResourcePath()).thenReturn(Optional.of("img/order.png"));
         when(configuration.additionalDaysImgResourcePath()).thenReturn(Optional.of("img/order-days.png"));
         when(configuration.travelImgResourcePath()).thenReturn(Optional.of("img/travel.png"));
+        when(configuration.getScale()).thenReturn(2);
+        when(configuration.getRoundingMode()).thenReturn(RoundingMode.HALF_UP);
 
         when(form.getMake()).thenReturn("opel");
         when(form.getModel()).thenReturn("grandland");
@@ -114,6 +118,8 @@ public class BusinessTripTest {
         when(configuration.orderImgResourcePath()).thenReturn(Optional.of("img/order.png"));
         when(configuration.additionalDaysImgResourcePath()).thenReturn(Optional.of("img/order-days.png"));
         when(configuration.travelImgResourcePath()).thenReturn(Optional.of("img/travel.png"));
+        when(configuration.getScale()).thenReturn(2);
+        when(configuration.getRoundingMode()).thenReturn(RoundingMode.HALF_UP);
 
 
         when(form.getIsTravelWithYourVehicle()).thenReturn(true);
@@ -153,6 +159,8 @@ public class BusinessTripTest {
         when(configuration.orderImgResourcePath()).thenReturn(Optional.of("img/order.png"));
         when(configuration.additionalDaysImgResourcePath()).thenReturn(Optional.of("img/order-days.png"));
         when(configuration.travelImgResourcePath()).thenReturn(Optional.of("img/travel.png"));
+        when(configuration.getScale()).thenReturn(2);
+        when(configuration.getRoundingMode()).thenReturn(RoundingMode.HALF_UP);
     }
 
     public static class ImageDisplay extends JFrame {

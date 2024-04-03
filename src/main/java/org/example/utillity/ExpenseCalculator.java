@@ -3,31 +3,36 @@ package org.example.utillity;
 import org.example.configuration.IConfiguration;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Objects;
 
 public class ExpenseCalculator {
 
-    public static BigDecimal calculateTotalFuelPrice(BigDecimal kilometers, BigDecimal costBy100, BigDecimal fuelPrice) {
+    private IConfiguration configuration;
+
+    public ExpenseCalculator(IConfiguration configuration) {
+        this.configuration = configuration;
+    }
+
+    public BigDecimal calculateTotalFuelPrice(BigDecimal kilometers, BigDecimal costBy100, BigDecimal fuelPrice) {
         BigDecimal distance = Objects.requireNonNullElse(kilometers, BigDecimal.ZERO);
         distance = BigDecValidator.asignZeroIfLessThanOne(distance);
         BigDecimal costFor100 = Objects.requireNonNullElse(costBy100, BigDecimal.ZERO);
         costFor100 = BigDecValidator.asignZeroIfLessThanOne(costFor100);
         BigDecimal fuelCost = Objects.requireNonNullElse(fuelPrice, BigDecimal.ZERO);
         fuelCost = BigDecValidator.asignZeroIfLessThanOne(fuelCost);
-        return calculateFuelConsumed(distance, costFor100).multiply(fuelCost);
+        return calculateFuelConsumed(distance, costFor100).multiply(fuelCost).setScale(configuration.getScale(), configuration.getRoundingMode());
     }
 
-    public static BigDecimal calculateFuelConsumed(BigDecimal kilometers, BigDecimal costBy100) {
+    public BigDecimal calculateFuelConsumed(BigDecimal kilometers, BigDecimal costBy100) {
         BigDecimal distance = Objects.requireNonNullElse(kilometers, BigDecimal.ZERO);
         distance = BigDecValidator.asignZeroIfLessThanOne(distance);
         BigDecimal costFor100 = Objects.requireNonNullElse(costBy100, BigDecimal.ZERO);
         costFor100 = BigDecValidator.asignZeroIfLessThanOne(costFor100);
-        return distance.divide(BigDecimal.valueOf(100.0), 2, RoundingMode.FLOOR).multiply(costFor100);
+        return distance.divide(BigDecimal.valueOf(100.0), configuration.getScale(), configuration.getRoundingMode()).multiply(costFor100);
     }
 
     @Deprecated
-    public static BigDecimal calculateTotalExpenses(BigDecimal hotelExpenses, BigDecimal dailyExpenses, BigDecimal totalFuelExpenses, BigDecimal addExpenses) {
+    public BigDecimal calculateTotalExpenses(BigDecimal hotelExpenses, BigDecimal dailyExpenses, BigDecimal totalFuelExpenses, BigDecimal addExpenses) {
 
         BigDecimal hotel = Objects.requireNonNullElse(hotelExpenses, BigDecimal.ZERO);
         BigDecimal daily = Objects.requireNonNullElse(dailyExpenses, BigDecimal.ZERO);
@@ -42,7 +47,7 @@ public class ExpenseCalculator {
     }
 
     @Deprecated
-    public static BigDecimal calculateTotalExpenses(BigDecimal hotelExpenses, BigDecimal dailyExpenses, BigDecimal totalFuelExpenses, BigDecimal addExpenses, BigDecimal otherTransportExpenses) {
+    public BigDecimal calculateTotalExpenses(BigDecimal hotelExpenses, BigDecimal dailyExpenses, BigDecimal totalFuelExpenses, BigDecimal addExpenses, BigDecimal otherTransportExpenses) {
 
         BigDecimal hotel = Objects.requireNonNullElse(hotelExpenses, BigDecimal.ZERO);
         BigDecimal daily = Objects.requireNonNullElse(dailyExpenses, BigDecimal.ZERO);
@@ -59,7 +64,7 @@ public class ExpenseCalculator {
     }
 
     @Deprecated
-    public static BigDecimal calcDailyMoney(BigDecimal numberOfDays, BigDecimal daysInHotel, IConfiguration configuration) {
+    public BigDecimal calcDailyMoney(BigDecimal numberOfDays, BigDecimal daysInHotel, IConfiguration configuration) {
         //nights in hotel * daily money for nightstay + (total days - nights in hotel = nights without hotel * daily money without night stay)
 
         BigDecimal result;
@@ -81,7 +86,7 @@ public class ExpenseCalculator {
     }
 
     @Deprecated
-    public static BigDecimal calculateTotalNightStayExpense(BigDecimal numberOfNightsStayed, BigDecimal nightStayPrice) {
+    public BigDecimal calculateTotalNightStayExpense(BigDecimal numberOfNightsStayed, BigDecimal nightStayPrice) {
         BigDecimal nights = Objects.requireNonNullElse(numberOfNightsStayed, BigDecimal.ZERO);
         BigDecimal cost = Objects.requireNonNullElse(nightStayPrice, BigDecimal.ZERO);
         nights = BigDecValidator.asignZeroIfLessThanOne(nights);
