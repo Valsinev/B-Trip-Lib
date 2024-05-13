@@ -14,12 +14,15 @@ public class DataManager {
     }
 
     public void dataAdder(List<TextCords> cords, String text) {
-        if(text != null && !text.trim().isEmpty()) {
-            cords.forEach(textCords -> data.add(new ImgData(text, textCords.xCord(), textCords.yCord())));
+        if(text != null && !text.trim().isEmpty() && cords != null) {
+//            cords.forEach(textCords -> data.add(new ImgData(text, textCords.xCord(), textCords.yCord())));
+            cords.forEach(cord -> dataAdder(cord, text));
         }
     }
 
     public void dataAdder(TextCords cords, String text) {
-        data.add(new ImgData(text, cords.xCord(), cords.yCord()));
+        if(text != null && !text.trim().isEmpty() && cords != null) {
+            data.add(new ImgData(text, cords.xCord(), cords.yCord()));
+        }
     }
 }
