@@ -77,7 +77,9 @@ public class TravelListDataManager {
         dataManager.dataAdder(coordinates.vehicleRegNumberCoordinates(), form.getRegistrationNumber());
         dataManager.dataAdder(coordinates.fuelTypeCoordinates(), form.getFuelType());
         dataManager.dataAdder(coordinates.kilometersCoordinates(), form.getKilometers().toString());
-        dataManager.dataAdder(coordinates.employerNameCoordinates(), form.getHeadEmployeeName());
+        if (!"управител".equals(form.getHeadEmployeeName())) {
+            dataManager.dataAdder(coordinates.employerNameCoordinates(), form.getHeadEmployeeName());
+        }
         dataManager.dataAdder(coordinates.monthAndYearCoordinates(), String.format("%s/%s", form.getMonthNumber(), form.getWhatYear()));
         return dataManager.data;
     }

@@ -23,8 +23,8 @@ public class BusinessTripTest {
         IConfiguration configuration = mock(IConfiguration.class);
 
 //        withoutVehicleWithoutHotel(form, configuration);
-        withVehicleWithoutHotel(form, configuration);
-//        withVehicleWithHotel(form, configuration);
+//        withVehicleWithoutHotel(form, configuration);
+        withVehicleWithHotel(form, configuration);
 
         List<BufferedImage> images = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class BusinessTripTest {
         when(form.getDays()).thenReturn(List.of(1,2,3,4,5,6,7,8,9,10));
         when(form.getMonthNumber()).thenReturn("1");
         when(form.getWhatYear()).thenReturn("2024");
-        when(form.getHeadEmployeeName()).thenReturn("Hristina Petkova");
+        when(form.getHeadEmployeeName()).thenReturn("управител");
         when(form.getReason()).thenReturn("podpomagane F202");
         when(form.getTripNumberThisMonth()).thenReturn(String.valueOf(1));
         when(form.getAdditionalExpenses()).thenReturn(BigDecimal.ZERO);

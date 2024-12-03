@@ -183,7 +183,9 @@ public class OrderListDataManager {
                 (form.getFullName().trim().isEmpty() ? "                                          ": form.getFullName()),
                 form.getPosition()));
         dataManager.dataAdder(coordinates.numberDocumentsCoordinates(), String.valueOf(form.getNumberDocuments() == 0 ? "" : form.getNumberDocuments()));
-        dataManager.dataAdder(coordinates.startCityCoordinates(), form.getStartDestination());
+        if (form.getIsTravelOnLastDay()) {
+            dataManager.dataAdder(coordinates.startCityCoordinates(), form.getStartDestination());
+        }
         dataManager.dataAdder(coordinates.endCityCoordinates(), form.getEndDestination());
         dataManager.dataAdder(coordinates.numberOfDaysCoordinates(), String.valueOf(form.getNumberOfDays()));
         dataManager.dataAdder(coordinates.startDateCoordinates(), String.format("%02d.%02d.%d", form.getDays().get(0), Integer.parseInt(form.getMonthNumber()), Integer.parseInt(form.getWhatYear())));
